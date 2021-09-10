@@ -73,7 +73,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas, TipoSala")] Sala sala)
+        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas")] Sala sala)
         {
             if (ModelState.IsValid)
             {
@@ -119,7 +119,7 @@ namespace ReservaCine.Controllers
                     var salaEncontrada = BuscarSala(id);
                     salaEncontrada.Numero = sala.Numero;
                     salaEncontrada.CapacidadButacas = sala.CapacidadButacas;
-                    salaEncontrada.tipoSala = sala.tipoSala;
+                    
 
                 }
                 catch (Exception)

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace ReservaCine.Models
 {
     public class TipoSala
-    {
-      
+    {   
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Ingrese un nombre por favor")]
@@ -19,7 +18,5 @@ namespace ReservaCine.Models
 
         [Required(ErrorMessage = "Ingrese un precio por favor")]
         public double Precio { get; set; }
-
-        
     }
 }

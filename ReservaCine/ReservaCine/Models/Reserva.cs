@@ -15,12 +15,14 @@ namespace ReservaCine.Models
         public Funcion Funcion { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        [DisplayName("Fecha de Alta")]
+        [DisplayName("Fecha de Reserva")]
         public DateTime FechaAlta { get; set; }
 
         [DisplayName("Cliente")]
         public Cliente Cliente { get; set; }
 
+        [Required (ErrorMessage = "Ingrese cantidad válida de butacas")]
+        [Range(1, 12, ErrorMessage = "Cantidad fuera de rango disponible")]
         [DisplayName("Cantidad de butacas")]
         public int CantidadButacas { get; set; }
 
