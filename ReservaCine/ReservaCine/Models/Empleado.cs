@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReservaCine.Models
 {
-
-    public class Cliente : Usuario
+    public class Empleado : Usuario
     {
-
-        public List<Reserva> Reservas { get; set; }
-
-           
-
+        [Required]
+        public int Legajo { get; set; }
     }
 }

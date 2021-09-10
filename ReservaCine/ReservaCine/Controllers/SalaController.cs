@@ -10,33 +10,42 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    public class ReservaController : Controller
+    public class SalaController : Controller
     {
         private readonly ReservaCineContext _context;
-
-        static List<Reserva> reservas = new List<Reserva>()
-        { 
-            new Reserva()
+        static List<Sala> salas = new List<Sala>()
+        {
+            new Sala
             {
-                Id = Guid.NewGuid(),
-                Funcion = Funcion,
-                FechaAlta = new DateTime(2021,09,16),
-                Cliente = 
-                CantidadButacas = 3,
+              Id = Guid.NewGuid(),
+              CapacidadButacas = 50,
+              Numero = 45
+
+
+            },
+            new Sala
+            {
+                 Id = Guid.NewGuid(),
+              CapacidadButacas = 52,
+              Numero = 43
             }
-        }
-        public ReservaController(ReservaCineContext context)
+
+        };
+
+        
+
+        public SalaController(ReservaCineContext context)
         {
             _context = context;
         }
 
-        // GET: Reserva
+        // GET: Sala
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Reserva.ToListAsync());
+            return View(salas);
         }
 
-        // GET: Reserva/Details/5
+        // GET: Sala/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -44,40 +53,38 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reserva == null)
+            var sala = BuscarSala(id);
+            if (sala == null)
             {
                 return NotFound();
             }
 
-            return View(reserva);
+            return View(sala);
         }
 
-        // GET: Reserva/Create
+        // GET: Sala/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reserva/Create
+        // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,CantidadButacas")] Reserva reserva)
+        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas, TipoSala")] Sala sala)
         {
             if (ModelState.IsValid)
             {
-                reserva.Id = Guid.NewGuid();
-                _context.Add(reserva);
-                await _context.SaveChangesAsync();
+                sala.Id = Guid.NewGuid();
+                salas.Add(sala);
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserva);
+            return View(sala);
         }
 
-        // GET: Reserva/Edit/5
+        // GET: Sala/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -85,22 +92,22 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva.FindAsync(id);
-            if (reserva == null)
+            var sala = BuscarSala(id);
+            if (sala == null)
             {
                 return NotFound();
             }
-            return View(reserva);
+            return View(sala);
         }
 
-        // POST: Reserva/Edit/5
+        // POST: Sala/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaAlta,CantidadButacas")] Reserva reserva)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Numero,CapacidadButacas")] Sala sala)
         {
-            if (id != reserva.Id)
+            if (id != sala.Id)
             {
                 return NotFound();
             }
@@ -109,12 +116,15 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    _context.Update(reserva);
-                    await _context.SaveChangesAsync();
+                    var salaEncontrada = BuscarSala(id);
+                    salaEncontrada.Numero = sala.Numero;
+                    salaEncontrada.CapacidadButacas = sala.CapacidadButacas;
+                    salaEncontrada.tipoSala = sala.tipoSala;
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
-                    if (!ReservaExists(reserva.Id))
+                    if (!SalaExists(sala.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +135,10 @@ namespace ReservaCine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserva);
+            return View(sala);
         }
 
-        // GET: Reserva/Delete/5
+        // GET: Sala/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -136,30 +146,36 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reserva == null)
+            var sala = BuscarSala(id);
+            if (sala == null)
             {
                 return NotFound();
             }
 
-            return View(reserva);
+            return View(sala);
         }
 
-        // POST: Reserva/Delete/5
+        // POST: Sala/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var reserva = await _context.Reserva.FindAsync(id);
-            _context.Reserva.Remove(reserva);
-            await _context.SaveChangesAsync();
+            var sala = BuscarSala(id);
+            salas.Remove(sala);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReservaExists(Guid id)
+        private bool SalaExists(Guid id)
         {
-            return _context.Reserva.Any(e => e.Id == id);
+            return _context.Sala.Any(e => e.Id == id);
+        }
+        private Sala BuscarSala(Guid? id)
+        {
+            if (id == null)
+                return null;
+
+            var Sala = salas.FirstOrDefault(p => p.Id == id);
+            return Sala;
         }
     }
 }

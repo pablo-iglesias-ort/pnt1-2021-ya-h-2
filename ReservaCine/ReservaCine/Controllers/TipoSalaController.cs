@@ -10,33 +10,39 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    public class ReservaController : Controller
+    public class TipoSalaController : Controller
     {
         private readonly ReservaCineContext _context;
+        static List<TipoSala> tipoSalas = new List<TipoSala>()
+        {
+            new TipoSala
+            {
+              Id = Guid.NewGuid(),
+              Nombre = "Sala Dorada",
+              Precio = 2000
 
-        static List<Reserva> reservas = new List<Reserva>()
-        { 
-            new Reserva()
+            },
+            new TipoSala
             {
                 Id = Guid.NewGuid(),
-                Funcion = Funcion,
-                FechaAlta = new DateTime(2021,09,16),
-                Cliente = 
-                CantidadButacas = 3,
+              Nombre = "Sala de Plata",
+              Precio = 1000
             }
-        }
-        public ReservaController(ReservaCineContext context)
+
+        };
+
+        public TipoSalaController(ReservaCineContext context)
         {
             _context = context;
         }
 
-        // GET: Reserva
+        // GET: TipoSala
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Reserva.ToListAsync());
+            return View(tipoSalas);
         }
 
-        // GET: Reserva/Details/5
+        // GET: TipoSala/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -44,40 +50,38 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reserva == null)
+            var tipoSala = BuscarTipoSala(id);
+            if (tipoSala == null)
             {
                 return NotFound();
             }
 
-            return View(reserva);
+            return View(tipoSala);
         }
 
-        // GET: Reserva/Create
+        // GET: TipoSala/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reserva/Create
+        // POST: TipoSala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,CantidadButacas")] Reserva reserva)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Precio")] TipoSala tipoSala)
         {
             if (ModelState.IsValid)
             {
-                reserva.Id = Guid.NewGuid();
-                _context.Add(reserva);
-                await _context.SaveChangesAsync();
+                tipoSala.Id = Guid.NewGuid();
+                tipoSalas.Add(tipoSala);
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserva);
+            return View(tipoSala);
         }
 
-        // GET: Reserva/Edit/5
+        // GET: TipoSala/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -85,22 +89,22 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva.FindAsync(id);
-            if (reserva == null)
+            var tipoSala = BuscarTipoSala(id);
+            if (tipoSala == null)
             {
                 return NotFound();
             }
-            return View(reserva);
+            return View(tipoSala);
         }
 
-        // POST: Reserva/Edit/5
+        // POST: TipoSala/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaAlta,CantidadButacas")] Reserva reserva)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Precio")] TipoSala tipoSala)
         {
-            if (id != reserva.Id)
+            if (id != tipoSala.Id)
             {
                 return NotFound();
             }
@@ -109,12 +113,15 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    _context.Update(reserva);
-                    await _context.SaveChangesAsync();
+                    var tipoSalaEncontrada = BuscarTipoSala(id);
+                    tipoSalaEncontrada.Precio = tipoSala.Precio;
+                    tipoSalaEncontrada.Nombre = tipoSala.Nombre;
+                    
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
-                    if (!ReservaExists(reserva.Id))
+                    if (!TipoSalaExists(tipoSala.Id))
                     {
                         return NotFound();
                     }
@@ -125,10 +132,10 @@ namespace ReservaCine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserva);
+            return View(tipoSala);
         }
 
-        // GET: Reserva/Delete/5
+        // GET: TipoSala/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -136,30 +143,37 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = await _context.Reserva
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reserva == null)
+            var tipoSala = BuscarTipoSala(id);
+                
+            if (tipoSala == null)
             {
                 return NotFound();
             }
 
-            return View(reserva);
+            return View(tipoSala);
         }
 
-        // POST: Reserva/Delete/5
+        // POST: TipoSala/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var reserva = await _context.Reserva.FindAsync(id);
-            _context.Reserva.Remove(reserva);
-            await _context.SaveChangesAsync();
+            var tipoSala = BuscarTipoSala(id);
+            tipoSalas.Remove(tipoSala);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReservaExists(Guid id)
+        private bool TipoSalaExists(Guid id)
         {
-            return _context.Reserva.Any(e => e.Id == id);
+            return _context.TipoSala.Any(e => e.Id == id);
+        }
+        private TipoSala BuscarTipoSala(Guid? id)
+        {
+            if (id == null)
+                return null;
+
+            var tipoSala = tipoSalas.FirstOrDefault(p => p.Id == id);
+            return tipoSala;
         }
     }
 }
