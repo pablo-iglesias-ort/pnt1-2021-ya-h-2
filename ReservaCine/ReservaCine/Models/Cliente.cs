@@ -9,6 +9,7 @@ namespace ReservaCine.Models
     public class Cliente : Usuario
     {
 
+
         public List<Reserva> Reservas { get; set; }
 
            

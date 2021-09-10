@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,23 +10,21 @@ namespace ReservaCine.Models
     public class Reserva
     {
         public Guid Id { get; set; }
-      
-        [Display(Name = "Cliente")]
-        public int ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
 
-
-        [Required(ErrorMessage = "Por favor ingrese la funcion")]
-        [Display(Name = "Función")]
-        public int FuncionId { get; set; }
+        [DisplayName("Función")]
         public Funcion Funcion { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        // [DisplayName("Fecha de Alta")]
+        [DisplayName("Fecha de Alta")]
         public DateTime FechaAlta { get; set; }
 
+        [DisplayName("Cliente")]
+        public Cliente Cliente { get; set; }
+
+        [DisplayName("Cantidad de butacas")]
         public int CantidadButacas { get; set; }
 
-    }
+
+     }
 
 }

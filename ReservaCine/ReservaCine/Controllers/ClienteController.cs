@@ -179,8 +179,8 @@ namespace ReservaCine.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var cliente = BuscarCliente(id);
-            _context.Cliente.Remove(cliente);
             clientes.Remove(cliente);
+
             return RedirectToAction(nameof(Index));
         }
 
