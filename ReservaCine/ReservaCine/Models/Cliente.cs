@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace ReservaCine.Models
 {
-    public class Funcion
+    public class Cliente : Usuario
     {
-        public Guid Id { get; set; }
-
+        public List<Reserva> Reservas { get; set; }
     }
 }

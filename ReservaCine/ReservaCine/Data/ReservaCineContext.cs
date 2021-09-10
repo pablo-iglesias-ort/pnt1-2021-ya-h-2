@@ -17,5 +17,9 @@ namespace ReservaCine.Data
         public DbSet<ReservaCine.Models.Pelicula> Pelicula { get; set; }
 
         public DbSet<ReservaCine.Models.Usuario> Usuario { get; set; }
+
+        public DbSet<ReservaCine.Models.Cliente> Cliente { get; set; }
+
+        public DbSet<ReservaCine.Models.Reserva> Reserva { get; set; }
     }
 }
