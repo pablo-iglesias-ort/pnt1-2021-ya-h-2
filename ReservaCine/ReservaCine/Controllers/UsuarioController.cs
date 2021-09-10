@@ -10,12 +10,12 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    public class EmpleadoController : Controller
+    public class UsuarioController : Controller
     {
         private readonly ReservaCineContext _context;
-        static List<Empleado> empleados = new List<Empleado>()
+        static List<Usuario> usuarios = new List<Usuario>()
         {
-            new Empleado()
+            new Usuario()
             {
                  Id = Guid.NewGuid(),
                  Nombre = "Patricio",
@@ -23,15 +23,12 @@ namespace ReservaCine.Controllers
                  Domicilio = "Avenida Siempreviva 742",
                  DNI = 1234,
                  Email = "patocastell@hotmail.com",
-                 Legajo = 12343224,
                  Telefono = 1222323564,
-                 FechaAlta = new DateTime(1998,11,2),
-                 NombreUsuario = "Pato98",
-                 Password = "12324254"
-                
+                 FechaAlta = DateTime.Now,
+                 NombreUsuario = "pato2021",
 
             },
-            new Empleado()
+            new Usuario()
             {
                  Id = Guid.NewGuid(),
                  Nombre = "Lionel",
@@ -39,26 +36,26 @@ namespace ReservaCine.Controllers
                  Domicilio = "Paris, Francia",
                  DNI = 33016244,
                  Email = "messikpo@yahoo.com",
-                 Legajo = 123437724,
                  Telefono = 0303456,
-                 FechaAlta = new DateTime(1987,6,24),
-                 NombreUsuario = "MessiCrack",
-                 Password = "12324s254"
+                 FechaAlta = DateTime.Now,
+                 NombreUsuario="lio2021",
+
 
             }
         };
-        public EmpleadoController(ReservaCineContext context)
+
+        public UsuarioController(ReservaCineContext context)
         {
             _context = context;
         }
 
-        // GET: Empleado
+        // GET: Usuario
         public async Task<IActionResult> Index()
         {
-            return View(empleados);
+            return View(usuarios);
         }
 
-        // GET: Empleado/Details/5
+        // GET: Usuario/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -66,39 +63,40 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var empleado = BuscarEmpleado(id);
-            if (empleado == null)
+            var usuario = BuscarUsuario(id);
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            return View(empleado);
+            return View(usuario);
         }
 
-        // GET: Empleado/Create
+        // GET: Usuario/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Empleado/Create
+        // POST: Usuario/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario, Password")] Empleado empleado)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,NombreUsuario,Password")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                empleado.Id = Guid.NewGuid();
-                _context.Add(empleado);
-                empleados.Add(empleado);
-                return RedirectToAction(nameof(Index));
+                usuario.Id = Guid.NewGuid();
+                _context.Usuario.Add(usuario);
+                usuarios.Add(usuario);
+               
+                return RedirectToAction("Index");
             }
-            return View(empleado);
+            return View(usuario);
         }
 
-        // GET: Empleado/Edit/5
+        // GET: Usuario/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -106,22 +104,22 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var empleado = BuscarEmpleado(id);
-            if (empleado == null)
+            var usuario = BuscarUsuario(id);
+            if (usuario == null)
             {
                 return NotFound();
             }
-            return View(empleado);
+            return View(usuario);
         }
 
-        // POST: Empleado/Edit/5
+        // POST: Usuario/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Legajo,Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario, Password")] Empleado empleado)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,NombreUsuario,Password")] Usuario usuario)
         {
-            if (id != empleado.Id)
+            if (id != usuario.Id)
             {
                 return NotFound();
             }
@@ -130,20 +128,21 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var EmpleadoEncontrado = BuscarEmpleado(id);
-                    EmpleadoEncontrado.Nombre = empleado.Nombre;
-                    EmpleadoEncontrado.Apellido = empleado.Apellido;
-                    EmpleadoEncontrado.DNI = empleado.DNI;
-                    EmpleadoEncontrado.Email = empleado.Email;
-                    EmpleadoEncontrado.Domicilio = empleado.Domicilio;
-                    EmpleadoEncontrado.Telefono = empleado.Telefono;
-                    EmpleadoEncontrado.NombreUsuario = empleado.NombreUsuario;
-                    EmpleadoEncontrado.Password = empleado.Password;
+                    var UsuarioEncontrada = BuscarUsuario(id);
+                    UsuarioEncontrada.Nombre = usuario.Nombre;
+                    UsuarioEncontrada.Apellido = usuario.Apellido; 
+                    UsuarioEncontrada.DNI = usuario.DNI;
+                    UsuarioEncontrada.Email = usuario.Email;
+                    UsuarioEncontrada.Domicilio = usuario.Domicilio;
+                    UsuarioEncontrada.Telefono = usuario.Telefono;
+                    UsuarioEncontrada.NombreUsuario = usuario.NombreUsuario;
+                    UsuarioEncontrada.Password = usuario.Password;
+
 
                 }
                 catch (Exception)
                 {
-                    if (!EmpleadoExists(empleado.Id))
+                    if (!UsuarioExists(usuario.Id))
                     {
                         return NotFound();
                     }
@@ -152,12 +151,12 @@ namespace ReservaCine.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(empleado);
+            return View(usuario);
         }
 
-        // GET: Empleado/Delete/5
+        // GET: Usuario/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -165,37 +164,38 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var empleado = BuscarEmpleado(id);
-            if (empleado == null)
+            var usuario = BuscarUsuario(id);
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            return View(empleado);
+            return View(usuario);
         }
 
-        // POST: Empleado/Delete/5
+        // POST: Usuario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var empleado = BuscarEmpleado(id);
-            empleados.Remove(empleado);
-            return RedirectToAction(nameof(Index));
+            var usuario = BuscarUsuario(id);
+            _context.Usuario.Remove(usuario);
+            usuarios.Remove(usuario);
+            return RedirectToAction("Index");
         }
 
-        private bool EmpleadoExists(Guid id)
+        private bool UsuarioExists(Guid id)
         {
-            return _context.Empleado.Any(e => e.Id == id);
+            return _context.Usuario.Any(e => e.Id == id);
         }
-        private Empleado BuscarEmpleado(Guid? id)
+
+        private Usuario BuscarUsuario(Guid? id)  
         {
             if (id == null)
-            {
                 return null;
-            }
-            return empleados.FirstOrDefault(e => e.Id == id);
-        }
+            var usuario= usuarios.FirstOrDefault(u => u.Id == id);
 
+            return usuario;
+        }
     }
 }

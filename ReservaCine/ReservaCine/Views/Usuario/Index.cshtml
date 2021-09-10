@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ReservaCine.Models.Empleado>
+﻿@model IEnumerable<ReservaCine.Models.Usuario>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,9 +12,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Legajo)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
@@ -31,11 +28,12 @@
                 @Html.DisplayNameFor(model => model.Domicilio)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefono)
+            @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FechaAlta)
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.NombreUsuario)
             </th>
@@ -45,9 +43,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Legajo)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
@@ -73,9 +68,9 @@
                 @Html.DisplayFor(modelItem => item.NombreUsuario)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
             </td>
         </tr>
 }
