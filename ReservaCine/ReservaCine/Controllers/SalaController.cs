@@ -18,7 +18,6 @@ namespace ReservaCine.Controllers
             new Sala
             {
               Id = Guid.NewGuid(),
-              tipoSala = TipoSalas,
               CapacidadButacas = 50,
               Numero = 45
 
@@ -27,14 +26,13 @@ namespace ReservaCine.Controllers
             new Sala
             {
                  Id = Guid.NewGuid(),
-              tipoSala = TipoSalas,
               CapacidadButacas = 52,
               Numero = 43
             }
 
         };
 
-        public static TipoSala TipoSalas { get; private set; }
+        
 
         public SalaController(ReservaCineContext context)
         {
