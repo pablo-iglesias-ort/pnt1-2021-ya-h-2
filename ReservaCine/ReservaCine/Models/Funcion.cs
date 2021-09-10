@@ -9,7 +9,6 @@ namespace ReservaCine.Models
 {
     public class Funcion
     {
-<<<<<<< HEAD
       
 
         [Required(ErrorMessage = "Por favor ingrese una fecha")]
@@ -56,8 +55,5 @@ namespace ReservaCine.Models
       
 
 
-=======
-       public Guid Id { get; set; }
->>>>>>> 19b22ae9c3abdfd0bd861f76d4f9c5649f935f93
     }
 }
