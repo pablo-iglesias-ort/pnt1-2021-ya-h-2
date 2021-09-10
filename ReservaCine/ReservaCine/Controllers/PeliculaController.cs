@@ -38,6 +38,8 @@ namespace ReservaCine.Controllers
             }
         };
 
+        public static List<Pelicula> Peliculas { get => peliculas; set => peliculas = value; }
+
         public PeliculaController(ReservaCineContext context)
         {
             _context = context;
@@ -46,7 +48,7 @@ namespace ReservaCine.Controllers
         // GET: Pelicula
         public async Task<IActionResult> Index()
         {
-            return View(peliculas);
+            return View(Peliculas);
         }
 
         // GET: Pelicula/Details/5
@@ -182,7 +184,7 @@ namespace ReservaCine.Controllers
         {
             if (id == null)
                 return null;
-            var pelicula = peliculas.FirstOrDefault(p => p.Id == id);
+            var pelicula = Peliculas.FirstOrDefault(p => p.Id == id);
             return pelicula;
     }
     }
