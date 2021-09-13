@@ -8,7 +8,8 @@ namespace ReservaCine.Models
 {
     public class Empleado : Usuario
     {
-        [Required]
+        [Required(ErrorMessage ="Ingrese el legajo")]
+        [Range(0, 99999999999, ErrorMessage = "Ingrese un número válido")]
         public int Legajo { get; set; }
     }
 }
