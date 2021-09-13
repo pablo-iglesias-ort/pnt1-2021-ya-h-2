@@ -13,13 +13,14 @@ namespace ReservaCine.Models
     { 
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Ingrese un numero por favor")]
+        [Required(ErrorMessage = "Ingrese un número")]
+        [Range(0, 99999999999, ErrorMessage = "Ingrese un número válido")]
         public int Numero { get; set; }
 
         [DisplayName("Tipo de Sala")]
         public TipoSala tipoSala { get; set; }
 
-        [Required(ErrorMessage = "Ingresela capacidad de butacas por favor")]
+        [Required(ErrorMessage = "Ingrese la capacidad de butacas")]
         [Range(40, 200, ErrorMessage = "La cantidad ingresada es incorrecta")]
         [DisplayName("Capacidad de butacas")]
         public int CapacidadButacas { get; set; }
