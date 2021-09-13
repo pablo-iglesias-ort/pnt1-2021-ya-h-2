@@ -18,14 +18,14 @@ namespace ReservaCine.Controllers
             new Usuario()
             {
                  Id = Guid.NewGuid(),
-                 Nombre = "Patricio",
-                 Apellido = "Castellano",
+                 Nombre = "Felix",
+                 Apellido = "Dubois",
                  Domicilio = "Avenida Siempreviva 742",
                  DNI = 1234,
-                 Email = "patocastell@hotmail.com",
-                 Telefono = 1222323564,
+                 Email = "felixdubois@hotmail.com",
+                 Telefono = 122232356,
                  FechaAlta = DateTime.Now,
-                 NombreUsuario = "pato2021",
+                 NombreUsuario = "felix2021",
 
             },
             new Usuario()
@@ -33,9 +33,9 @@ namespace ReservaCine.Controllers
                  Id = Guid.NewGuid(),
                  Nombre = "Lionel",
                  Apellido = "Messi",
-                 Domicilio = "Paris, Francia",
+                 Domicilio = "Paris 4584",
                  DNI = 33016244,
-                 Email = "messikpo@yahoo.com",
+                 Email = "messi@yahoo.com",
                  Telefono = 0303456,
                  FechaAlta = DateTime.Now,
                  NombreUsuario="lio2021",
