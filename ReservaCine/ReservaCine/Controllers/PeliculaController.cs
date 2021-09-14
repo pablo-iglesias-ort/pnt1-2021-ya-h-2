@@ -23,7 +23,6 @@ namespace ReservaCine.Controllers
                 Duracion = 132,
                 FechaLanzamiento = new DateTime(2021,03,28),
                 Genero = new Genero("Acción"),
-                
             },
 
             new Pelicula()
@@ -79,14 +78,15 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion")] Pelicula pelicula)
+        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion,Genero")] Pelicula pelicula)
         {
             if (ModelState.IsValid)
             {
                 pelicula.Id = Guid.NewGuid();
-                _context.Add(pelicula);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Pelicula.Add(pelicula);
+                peliculas.Add(pelicula);
+                
+                return RedirectToAction("Index");
             }
             return View(pelicula);
         }
@@ -112,7 +112,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion")] Pelicula pelicula)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion, Genero")] Pelicula pelicula)
         {
             if (id != pelicula.Id)
             {
@@ -128,6 +128,7 @@ namespace ReservaCine.Controllers
                     peliculaEncontrada.Titulo = pelicula.Titulo;
                     peliculaEncontrada.Descripcion = pelicula.Descripcion;
                     peliculaEncontrada.Duracion = pelicula.Duracion;
+                    peliculaEncontrada.Genero = pelicula.Genero;
 
                 }
                 catch (Exception)
@@ -154,8 +155,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var pelicula = await _context.Pelicula
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var pelicula = BuscarPelicula(id);
             if (pelicula == null)
             {
                 return NotFound();
@@ -169,9 +169,9 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var pelicula = await _context.Pelicula.FindAsync(id);
+            var pelicula = BuscarPelicula(id);
             _context.Pelicula.Remove(pelicula);
-            await _context.SaveChangesAsync();
+            peliculas.Remove(pelicula);
             return RedirectToAction(nameof(Index));
         }
 

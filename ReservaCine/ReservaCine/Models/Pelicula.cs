@@ -28,8 +28,9 @@ namespace ReservaCine.Models
         [DisplayName("Duración")]
         public int Duracion { get; set; }
 
-        [Required(ErrorMessage = "Ingrese un Género válido")]
-        public Genero Genero;
+        // [Required(ErrorMessage = "Ingrese un Género válido")]
+        
+        public Genero Genero { get; set; }
 
         public List<Funcion> funciones { get; set; }
 

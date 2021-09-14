@@ -33,7 +33,7 @@ namespace ReservaCine.Models
         public String Domicilio { get; set; }
 
         [Required(ErrorMessage = "Ingrese un número de Teléfono")]
-        [Range(10000000, 999999999 , ErrorMessage = "Teléfono incorrecto")]
+        [Range(1000000000, 99999999999 , ErrorMessage = "Teléfono incorrecto")]
         [DisplayName("Teléfono")]
         public long Telefono { get; set; }
 
@@ -55,7 +55,7 @@ namespace ReservaCine.Models
 
         public Usuario()
         {
-
+            FechaAlta = DateTime.Now;
         }
         
 
