@@ -26,5 +26,7 @@ namespace ReservaCine.Data
         public DbSet<ReservaCine.Models.Sala> Sala { get; set; }
 
         public DbSet<ReservaCine.Models.TipoSala> TipoSala { get; set; }
+
+        public DbSet<ReservaCine.Models.Genero> Genero { get; set; }
     }
 }
