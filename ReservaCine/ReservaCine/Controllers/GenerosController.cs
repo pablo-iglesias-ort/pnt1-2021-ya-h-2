@@ -36,7 +36,7 @@ namespace ReservaCine.Controllers
         {
             _context = context;
         }
-        public void CargarCategorias()
+        public void CargarGeneros()
         {
             foreach (Genero c in generos)
             {
@@ -103,7 +103,7 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-            CargarCategorias();
+            CargarGeneros();
             var genero = _context.Genero.Local.ToList().Find(c => c.Id == id);
             if (genero == null)
             {
