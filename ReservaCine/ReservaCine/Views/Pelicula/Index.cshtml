@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Duracion) 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genero)
+                @Html.DisplayNameFor(model => model.Genero.Nombre)
             </th>
         </tr>
     </thead>
@@ -45,7 +45,7 @@
                 @Html.DisplayFor(modelItem => item.Duracion)@Html.Label("min")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Genero)
+                @Html.DisplayFor(modelItem => item.Genero.Nombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |

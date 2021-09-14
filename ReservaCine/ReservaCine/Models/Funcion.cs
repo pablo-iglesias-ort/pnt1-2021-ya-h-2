@@ -52,7 +52,7 @@ namespace ReservaCine.Models
 
         [Display(Name = "Reservas")]
         public List<Reserva> Reservas { get; set; }
-        public object Horario { get; internal set; }
+        public DateTime Horario { get; set; }
     }     
     
   

@@ -10,7 +10,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    public class GenerosController : Controller
+    public class GeneroController : Controller
     {
         private readonly ReservaCineContext _context;
         static List<Genero> generos = new List<Genero>()
@@ -18,7 +18,7 @@ namespace ReservaCine.Controllers
             new Genero ()
             {
                 Id = Guid.NewGuid(),
-                Nombre = "Accion",
+                Nombre = "Acción",
                 Peliculas = new List<Pelicula>()
                 {
                 }
@@ -32,7 +32,7 @@ namespace ReservaCine.Controllers
                 }
             }
         };
-        public GenerosController(ReservaCineContext context)
+        public GeneroController(ReservaCineContext context)
         {
             _context = context;
         }

@@ -11,11 +11,11 @@ using ReservaCine.Data;
 namespace ReservaCine.Controllers
 {
 
-    public class FuncionesController : Controller
+    public class FuncionController : Controller
     {
         private readonly ReservaCineContext _context;
 
-        public FuncionesController(ReservaCineContext context)
+        public FuncionController(ReservaCineContext context)
         {
             _context = context;
         }

@@ -7,26 +7,17 @@ namespace ReservaCine.Models
 {
     public class Genero
     {
-        private string v;
-
         public Guid Id { get; set; }
         public string Nombre { get; set; }
         public List<Pelicula> Peliculas { get; set; }
-
-
-        public Genero(string v, object a)
-        {
-            this.v = v;
-
-        }
 
         public Genero()
         {
         }
 
-        public Genero(string v)
+        public Genero(string nombre)
         {
-            this.v = v;
+            Nombre = nombre;
         }
     }
 }
