@@ -79,21 +79,21 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,Peliculas")] Genero categoria)
+        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,Peliculas")] Genero genero)
         {
             if (ModelState.IsValid)
             {
-                categoria.Id = Guid.NewGuid();
-                _context.Add(categoria);
-                foreach (Pelicula p in categoria.Peliculas)
+                genero.Id = Guid.NewGuid();
+                _context.Add(genero);
+                foreach (Pelicula p in genero.Peliculas)
                 {
-                    p.Genero = categoria;
+                    p.Genero = genero;
                     _context.Update(p);
                 }
                 //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoria);
+            return View(genero);
         }
 
         // GET: Genero/Edit/5
@@ -104,13 +104,13 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
             CargarCategorias();
-            var categoria = _context.Genero.Local.ToList().Find(c => c.Id == id);
-            if (categoria == null)
+            var genero = _context.Genero.Local.ToList().Find(c => c.Id == id);
+            if (genero == null)
             {
                 return NotFound();
             }
 
-            return View(categoria);
+            return View(genero);
         }
 
         // POST: Genero/Edit/5
@@ -153,7 +153,7 @@ namespace ReservaCine.Controllers
             return View(genero);
         }
 
-    
+
 
         private bool GeneroExists(Guid id)
         {
