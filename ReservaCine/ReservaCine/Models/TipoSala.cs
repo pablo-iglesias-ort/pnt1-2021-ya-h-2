@@ -11,12 +11,12 @@ namespace ReservaCine.Models
     {   
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Ingrese un nombre por favor")]
-        [StringLength(20, MinimumLength = 3)]
+        [Required(ErrorMessage = "Ingrese un nombre")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Ingrese un nombre valido")]
         [DisplayName("Nombre de la sala")]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "Ingrese un precio por favor")]
+        [Required(ErrorMessage = "Ingrese un precio valido")]
         public double Precio { get; set; }
     }
 }
