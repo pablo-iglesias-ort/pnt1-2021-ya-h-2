@@ -14,22 +14,6 @@ namespace ReservaCine.Controllers
     {
         private readonly ReservaCineContext _context;
 
-        static List<Reserva> reservas = new List<Reserva>()
-        {
-            new Reserva()
-            {
-                Id = Guid.NewGuid(),
-                FechaAlta = new DateTime(2021,09,16),
-                CantidadButacas = 3
-            },
-
-            new Reserva()
-            {
-                Id = Guid.NewGuid(),
-                FechaAlta = new DateTime(2021,10,14),
-                CantidadButacas = 6
-            }
-        };
         public ReservaController(ReservaCineContext context)
         {
             _context = context;
@@ -38,7 +22,7 @@ namespace ReservaCine.Controllers
         // GET: Reserva
         public async Task<IActionResult> Index()
         {
-            return View(reservas);
+            return View(await _context.Reserva.ToListAsync());
         }
 
         // GET: Reserva/Details/5
@@ -49,7 +33,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = BuscarReserva(id);
+            var reserva = await _context.Reserva
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (reserva == null)
             {
                 return NotFound();
@@ -75,8 +60,7 @@ namespace ReservaCine.Controllers
             {
                 reserva.Id = Guid.NewGuid();
                 _context.Add(reserva);
-                reservas.Add(reserva);
-
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(reserva);
@@ -90,7 +74,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = BuscarReserva(id);
+            var reserva = await _context.Reserva.FindAsync(id);
             if (reserva == null)
             {
                 return NotFound();
@@ -114,11 +98,10 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var ReservaEncontrada = BuscarReserva(id);
-                    ReservaEncontrada.FechaAlta = reserva.FechaAlta;
-                    ReservaEncontrada.CantidadButacas = reserva.CantidadButacas;
+                    _context.Update(reserva);
+                    await _context.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!ReservaExists(reserva.Id))
                     {
@@ -142,8 +125,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var reserva = BuscarReserva(id);
-
+            var reserva = await _context.Reserva
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (reserva == null)
             {
                 return NotFound();
@@ -157,9 +140,9 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var reserva = BuscarReserva(id);
-            reservas.Remove(reserva);
-
+            var reserva = await _context.Reserva.FindAsync(id);
+            _context.Reserva.Remove(reserva);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -167,14 +150,5 @@ namespace ReservaCine.Controllers
         {
             return _context.Reserva.Any(e => e.Id == id);
         }
-        private Reserva BuscarReserva(Guid? id)
-        {
-            if (id == null)
-                return null;
-            var reserva = reservas.FirstOrDefault(r => r.Id == id);
-
-            return reserva;
-        }
-
     }
 }

@@ -1,63 +1,66 @@
 ﻿@model ReservaCine.Models.Funcion
 
 @{
-    ViewData["Title"] = "Detalles de la función";
+    ViewData["Title"] = "Details";
 }
 
-<h1>Funciones</h1>
+<h1>Details</h1>
 
 <div>
-    <h4>Detalle</h4>
+    <h4>Funcion</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fecha)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fecha)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Sala)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Hora)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sala.tipoSala.Nombre)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Hora)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Pelicula)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Pelicula.Titulo)
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Horario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Horario)
-        </dd>
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CantButacasDisponibles)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CantButacasDisponibles)
         </dd>
-    </dl>
-
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reservas)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Confirmar)
         </dt>
-        <dd class="col-sm-10">
-            <ul>
-                @foreach (Reserva reserva in Model.Reservas)
-            {
-                <li> Cliente: @reserva.Cliente.NombreUsuario,  Cantidad de butacas: @reserva.CantidadButacas</li>
-            }
-            </ul>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Confirmar)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PeliculaId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PeliculaId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SalaId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SalaId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Horario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Horario)
         </dd>
     </dl>
 </div>
-
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Volver a la lista</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

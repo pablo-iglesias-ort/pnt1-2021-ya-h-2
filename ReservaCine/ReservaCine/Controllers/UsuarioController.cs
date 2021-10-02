@@ -13,36 +13,6 @@ namespace ReservaCine.Controllers
     public class UsuarioController : Controller
     {
         private readonly ReservaCineContext _context;
-        static List<Usuario> usuarios = new List<Usuario>()
-        {
-            new Usuario()
-            {
-                 Id = Guid.NewGuid(),
-                 Nombre = "Felix",
-                 Apellido = "Dubois",
-                 Domicilio = "Avenida Siempreviva 742",
-                 DNI = 1234,
-                 Email = "felixdubois@hotmail.com",
-                 Telefono = 122232356,
-                 FechaAlta = DateTime.Now,
-                 NombreUsuario = "felix2021",
-
-            },
-            new Usuario()
-            {
-                 Id = Guid.NewGuid(),
-                 Nombre = "Lionel",
-                 Apellido = "Messi",
-                 Domicilio = "Paris 4584",
-                 DNI = 33016244,
-                 Email = "messi@yahoo.com",
-                 Telefono = 0303456,
-                 FechaAlta = DateTime.Now,
-                 NombreUsuario="lio2021",
-
-
-            }
-        };
 
         public UsuarioController(ReservaCineContext context)
         {
@@ -52,7 +22,7 @@ namespace ReservaCine.Controllers
         // GET: Usuario
         public async Task<IActionResult> Index()
         {
-            return View(usuarios);
+            return View(await _context.Usuario.ToListAsync());
         }
 
         // GET: Usuario/Details/5
@@ -63,7 +33,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var usuario = BuscarUsuario(id);
+            var usuario = await _context.Usuario
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
                 return NotFound();
@@ -83,15 +54,14 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,NombreUsuario,Password")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
                 usuario.Id = Guid.NewGuid();
-                _context.Usuario.Add(usuario);
-                usuarios.Add(usuario);
-               
-                return RedirectToAction("Index");
+                _context.Add(usuario);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(usuario);
         }
@@ -104,7 +74,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var usuario = BuscarUsuario(id);
+            var usuario = await _context.Usuario.FindAsync(id);
             if (usuario == null)
             {
                 return NotFound();
@@ -117,7 +87,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,NombreUsuario,Password")] Usuario usuario)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -128,19 +98,10 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var UsuarioEncontrada = BuscarUsuario(id);
-                    UsuarioEncontrada.Nombre = usuario.Nombre;
-                    UsuarioEncontrada.Apellido = usuario.Apellido; 
-                    UsuarioEncontrada.DNI = usuario.DNI;
-                    UsuarioEncontrada.Email = usuario.Email;
-                    UsuarioEncontrada.Domicilio = usuario.Domicilio;
-                    UsuarioEncontrada.Telefono = usuario.Telefono;
-                    UsuarioEncontrada.NombreUsuario = usuario.NombreUsuario;
-                    UsuarioEncontrada.Password = usuario.Password;
-
-
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!UsuarioExists(usuario.Id))
                     {
@@ -151,7 +112,7 @@ namespace ReservaCine.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             return View(usuario);
         }
@@ -164,7 +125,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var usuario = BuscarUsuario(id);
+            var usuario = await _context.Usuario
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (usuario == null)
             {
                 return NotFound();
@@ -178,24 +140,15 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var usuario = BuscarUsuario(id);
+            var usuario = await _context.Usuario.FindAsync(id);
             _context.Usuario.Remove(usuario);
-            usuarios.Remove(usuario);
-            return RedirectToAction("Index");
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool UsuarioExists(Guid id)
         {
             return _context.Usuario.Any(e => e.Id == id);
-        }
-
-        private Usuario BuscarUsuario(Guid? id)  
-        {
-            if (id == null)
-                return null;
-            var usuario= usuarios.FirstOrDefault(u => u.Id == id);
-
-            return usuario;
         }
     }
 }

@@ -13,23 +13,6 @@ namespace ReservaCine.Controllers
     public class TipoSalaController : Controller
     {
         private readonly ReservaCineContext _context;
-        static List<TipoSala> tipoSalas = new List<TipoSala>()
-        {
-            new TipoSala
-            {
-              Id = Guid.NewGuid(),
-              Nombre = "Sala Dorada",
-              Precio = 2000
-
-            },
-            new TipoSala
-            {
-                Id = Guid.NewGuid(),
-              Nombre = "Sala de Plata",
-              Precio = 1000
-            }
-
-        };
 
         public TipoSalaController(ReservaCineContext context)
         {
@@ -39,7 +22,7 @@ namespace ReservaCine.Controllers
         // GET: TipoSala
         public async Task<IActionResult> Index()
         {
-            return View(tipoSalas);
+            return View(await _context.TipoSala.ToListAsync());
         }
 
         // GET: TipoSala/Details/5
@@ -50,7 +33,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var tipoSala = BuscarTipoSala(id);
+            var tipoSala = await _context.TipoSala
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (tipoSala == null)
             {
                 return NotFound();
@@ -75,7 +59,8 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 tipoSala.Id = Guid.NewGuid();
-                tipoSalas.Add(tipoSala);
+                _context.Add(tipoSala);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tipoSala);
@@ -89,7 +74,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var tipoSala = BuscarTipoSala(id);
+            var tipoSala = await _context.TipoSala.FindAsync(id);
             if (tipoSala == null)
             {
                 return NotFound();
@@ -113,13 +98,10 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var tipoSalaEncontrada = BuscarTipoSala(id);
-                    tipoSalaEncontrada.Precio = tipoSala.Precio;
-                    tipoSalaEncontrada.Nombre = tipoSala.Nombre;
-                    
-
+                    _context.Update(tipoSala);
+                    await _context.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!TipoSalaExists(tipoSala.Id))
                     {
@@ -143,8 +125,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var tipoSala = BuscarTipoSala(id);
-                
+            var tipoSala = await _context.TipoSala
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (tipoSala == null)
             {
                 return NotFound();
@@ -158,22 +140,15 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var tipoSala = BuscarTipoSala(id);
-            tipoSalas.Remove(tipoSala);
+            var tipoSala = await _context.TipoSala.FindAsync(id);
+            _context.TipoSala.Remove(tipoSala);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TipoSalaExists(Guid id)
         {
             return _context.TipoSala.Any(e => e.Id == id);
-        }
-        private TipoSala BuscarTipoSala(Guid? id)
-        {
-            if (id == null)
-                return null;
-
-            var tipoSala = tipoSalas.FirstOrDefault(p => p.Id == id);
-            return tipoSala;
         }
     }
 }

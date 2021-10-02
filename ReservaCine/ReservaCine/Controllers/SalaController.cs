@@ -13,26 +13,6 @@ namespace ReservaCine.Controllers
     public class SalaController : Controller
     {
         private readonly ReservaCineContext _context;
-        static List<Sala> salas = new List<Sala>()
-        {
-            new Sala
-            {
-              Id = Guid.NewGuid(),
-              CapacidadButacas = 50,
-              Numero = 45
-
-
-            },
-            new Sala
-            {
-                 Id = Guid.NewGuid(),
-              CapacidadButacas = 52,
-              Numero = 43
-            }
-
-        };
-
-        
 
         public SalaController(ReservaCineContext context)
         {
@@ -42,7 +22,7 @@ namespace ReservaCine.Controllers
         // GET: Sala
         public async Task<IActionResult> Index()
         {
-            return View(salas);
+            return View(await _context.Sala.ToListAsync());
         }
 
         // GET: Sala/Details/5
@@ -53,7 +33,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var sala = BuscarSala(id);
+            var sala = await _context.Sala
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (sala == null)
             {
                 return NotFound();
@@ -78,7 +59,8 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 sala.Id = Guid.NewGuid();
-                salas.Add(sala);
+                _context.Add(sala);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(sala);
@@ -92,7 +74,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var sala = BuscarSala(id);
+            var sala = await _context.Sala.FindAsync(id);
             if (sala == null)
             {
                 return NotFound();
@@ -116,13 +98,10 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var salaEncontrada = BuscarSala(id);
-                    salaEncontrada.Numero = sala.Numero;
-                    salaEncontrada.CapacidadButacas = sala.CapacidadButacas;
-                    
-
+                    _context.Update(sala);
+                    await _context.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!SalaExists(sala.Id))
                     {
@@ -146,7 +125,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var sala = BuscarSala(id);
+            var sala = await _context.Sala
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (sala == null)
             {
                 return NotFound();
@@ -160,22 +140,15 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var sala = BuscarSala(id);
-            salas.Remove(sala);
+            var sala = await _context.Sala.FindAsync(id);
+            _context.Sala.Remove(sala);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SalaExists(Guid id)
         {
             return _context.Sala.Any(e => e.Id == id);
-        }
-        private Sala BuscarSala(Guid? id)
-        {
-            if (id == null)
-                return null;
-
-            var Sala = salas.FirstOrDefault(p => p.Id == id);
-            return Sala;
         }
     }
 }

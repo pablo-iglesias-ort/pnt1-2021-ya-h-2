@@ -14,37 +14,6 @@ namespace ReservaCine.Controllers
     {
         private readonly ReservaCineContext _context;
 
-        static List<Cliente> clientes = new List<Cliente>()
-
-        {
-            new Cliente()
-            {
-                 Id = Guid.NewGuid(),
-                 Nombre = "Diego Armando",
-                 Apellido = "Maradona",
-                 Domicilio = "Segurola y Habana",
-                 DNI = 10234086,
-                 Email = "diegoarmando86@gmail.com",
-                 Telefono = 1119861990,
-                 FechaAlta = new DateTime(1960,10,30),
-                 NombreUsuario = "Diegol86",
-                 Password = "12324254"
-            },
-            new Cliente()
-            {
-                 Id = Guid.NewGuid(),
-                 Nombre = "Lionel",
-                 Apellido = "Messi",
-                 Domicilio = "Paris, Francia",
-                 DNI = 33016244,
-                 Email = "messikpo@yahoo.com",
-                 Telefono = 0303456,
-                 FechaAlta = new DateTime(1987,6,24),
-                 NombreUsuario = "MessiCrack",
-                 Password = "12324s254"
-            }
-        };
-
         public ClienteController(ReservaCineContext context)
         {
             _context = context;
@@ -53,7 +22,7 @@ namespace ReservaCine.Controllers
         // GET: Cliente
         public async Task<IActionResult> Index()
         {
-            return View(clientes);
+            return View(await _context.Cliente.ToListAsync());
         }
 
         // GET: Cliente/Details/5
@@ -64,7 +33,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var cliente = BuscarCliente(id);
+            var cliente = await _context.Cliente
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
                 return NotFound();
@@ -84,14 +54,13 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario, Password")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
                 cliente.Id = Guid.NewGuid();
                 _context.Add(cliente);
-                clientes.Add(cliente);
-
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(cliente);
@@ -105,7 +74,7 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var cliente = BuscarCliente(id);
+            var cliente = await _context.Cliente.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
@@ -118,7 +87,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario,Password")] Cliente cliente)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -129,17 +98,10 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    var ClienteEncontrado = BuscarCliente(id);
-                    ClienteEncontrado.Nombre = cliente.Nombre;
-                    ClienteEncontrado.Apellido = cliente.Apellido;
-                    ClienteEncontrado.DNI = cliente.DNI;
-                    ClienteEncontrado.Email = cliente.Email;
-                    ClienteEncontrado.Domicilio = cliente.Domicilio;
-                    ClienteEncontrado.Telefono = cliente.Telefono;
-                    ClienteEncontrado.NombreUsuario = cliente.NombreUsuario;
-                    ClienteEncontrado.Password = cliente.Password;
+                    _context.Update(cliente);
+                    await _context.SaveChangesAsync();
                 }
-                catch (Exception)
+                catch (DbUpdateConcurrencyException)
                 {
                     if (!ClienteExists(cliente.Id))
                     {
@@ -163,8 +125,8 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var cliente = BuscarCliente(id);
-                
+            var cliente = await _context.Cliente
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
                 return NotFound();
@@ -178,23 +140,15 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var cliente = BuscarCliente(id);
-            clientes.Remove(cliente);
-
+            var cliente = await _context.Cliente.FindAsync(id);
+            _context.Cliente.Remove(cliente);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClienteExists(Guid id)
         {
             return _context.Cliente.Any(e => e.Id == id);
-        }
-        private Cliente BuscarCliente(Guid? id)
-        {
-            if (id == null)
-                return null;
-            var cliente = clientes.FirstOrDefault(c => c.Id == id);
-
-            return cliente;
         }
     }
 }

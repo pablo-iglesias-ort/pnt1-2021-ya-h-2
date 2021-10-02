@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,40 +13,16 @@ namespace ReservaCine.Controllers
     public class GeneroController : Controller
     {
         private readonly ReservaCineContext _context;
-        static List<Genero> generos = new List<Genero>()
-        {
-            new Genero ()
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Acción",
-                Peliculas = new List<Pelicula>()
-                {
-                }
-            },
-            new Genero
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Comedia",
-                Peliculas = new List<Pelicula>()
-                {
-                }
-            }
-        };
+
         public GeneroController(ReservaCineContext context)
         {
             _context = context;
         }
-        public void CargarGeneros()
-        {
-            foreach (Genero c in generos)
-            {
-                _context.Genero.Add(c);
-            }
-        }
+
         // GET: Genero
         public async Task<IActionResult> Index()
         {
-            return View(generos);
+            return View(await _context.Genero.ToListAsync());
         }
 
         // GET: Genero/Details/5
@@ -57,20 +33,19 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
-            var producto = await _context.Pelicula
+            var genero = await _context.Genero
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (producto == null)
+            if (genero == null)
             {
                 return NotFound();
             }
 
-            return View(producto);
+            return View(genero);
         }
 
         // GET: Genero/Create
         public IActionResult Create()
         {
-
             return View();
         }
 
@@ -79,18 +54,13 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,Peliculas")] Genero genero)
+        public async Task<IActionResult> Create([Bind("Id,Nombre")] Genero genero)
         {
             if (ModelState.IsValid)
             {
                 genero.Id = Guid.NewGuid();
                 _context.Add(genero);
-                foreach (Pelicula p in genero.Peliculas)
-                {
-                    p.Genero = genero;
-                    _context.Update(p);
-                }
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(genero);
@@ -103,13 +73,12 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-            CargarGeneros();
-            var genero = _context.Genero.Local.ToList().Find(c => c.Id == id);
+
+            var genero = await _context.Genero.FindAsync(id);
             if (genero == null)
             {
                 return NotFound();
             }
-
             return View(genero);
         }
 
@@ -118,7 +87,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Peliculas")] Genero genero)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre")] Genero genero)
         {
             if (id != genero.Id)
             {
@@ -130,12 +99,7 @@ namespace ReservaCine.Controllers
                 try
                 {
                     _context.Update(genero);
-                    foreach (Pelicula p in genero.Peliculas)
-                    {
-                        p.Genero = genero;
-                        _context.Update(p);
-                    }
-                    //await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -153,7 +117,34 @@ namespace ReservaCine.Controllers
             return View(genero);
         }
 
+        // GET: Genero/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var genero = await _context.Genero
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (genero == null)
+            {
+                return NotFound();
+            }
+
+            return View(genero);
+        }
+
+        // POST: Genero/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var genero = await _context.Genero.FindAsync(id);
+            _context.Genero.Remove(genero);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool GeneroExists(Guid id)
         {

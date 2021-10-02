@@ -26,8 +26,10 @@ namespace ReservaCine
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<ReservaCineContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ReservaCineContext")));
+            //services.AddDbContext<ReservaCineContext>(options =>
+            //        options.UseSqlite(Configuration.GetConnectionString("ReservaCineContext")));
+            services.AddDbContext<ReservaCineContext>(opciones => opciones.UseSqlite("filename=BaseDeDatos.db"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
