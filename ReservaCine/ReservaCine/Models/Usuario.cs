@@ -9,6 +9,7 @@ namespace ReservaCine.Models
 {
     public class Usuario
     {
+        [Key]
         public Guid Id { get; set; }
 
         [Required (ErrorMessage = "Ingrese un nombre válido")]
@@ -20,7 +21,7 @@ namespace ReservaCine.Models
         public String Apellido { get; set; }
 
         [Required(ErrorMessage = "Ingrese un DNI válido")]
-        [Range(1000000, 999999999,ErrorMessage ="Ingrese DNI válido")]
+        [Range(1000000000, 99999999999, ErrorMessage ="Ingrese DNI válido")]
         public long DNI { get; set; }
 
         [Required(ErrorMessage = "Ingrese un Email válido")]
@@ -37,7 +38,6 @@ namespace ReservaCine.Models
         [DisplayName("Teléfono")]
         public long Telefono { get; set; }
 
-
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [DisplayName("Fecha de Alta")]
         public DateTime FechaAlta { get; set; }
@@ -51,14 +51,15 @@ namespace ReservaCine.Models
         [StringLength(15, MinimumLength = 8, ErrorMessage = "La contraseña debe tener un mínimo de 8 caracteres")]
         [DisplayName("Contraseña")]
         [ScaffoldColumn(false)] //para ocultar en columna
-        public String Password { get; set; }
+        public byte[] Password { get; set; }
 
+       [Required]
+       public Rol Rol { get; set; }
+        
         public Usuario()
         {
             FechaAlta = DateTime.Now;
         }
-        
-
 
 
 

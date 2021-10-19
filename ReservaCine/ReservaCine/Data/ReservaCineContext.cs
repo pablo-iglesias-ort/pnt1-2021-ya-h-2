@@ -9,7 +9,7 @@ namespace ReservaCine.Data
 {
     public class ReservaCineContext : DbContext
     {
-        public ReservaCineContext (DbContextOptions<ReservaCineContext> options)
+        public ReservaCineContext(DbContextOptions<ReservaCineContext> options)
             : base(options)
         {
         }
@@ -30,5 +30,7 @@ namespace ReservaCine.Data
         public DbSet<ReservaCine.Models.Genero> Genero { get; set; }
 
         public DbSet<ReservaCine.Models.Funcion> Funcion { get; set; }
+
+        
     }
 }

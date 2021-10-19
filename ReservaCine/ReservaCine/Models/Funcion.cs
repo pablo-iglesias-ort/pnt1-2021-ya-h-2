@@ -9,7 +9,7 @@ namespace ReservaCine.Models
 {
     public class Funcion
     {
-
+        [Key]
         public Guid Id { get; set; }
 
 
@@ -37,13 +37,6 @@ namespace ReservaCine.Models
         [Display(Name = "Confirmar")]
         public Boolean Confirmar { get; set; }
 
-
-        [Required(ErrorMessage = "Por favor ingresar pelicula")]
-        [Display(Name = "Película")]
-        public int PeliculaId { get; set; }
-        public Pelicula Pelicula { get; set; }
-
-
         [Required(ErrorMessage = "Por favor ingresar sala")]
         [Display(Name = "Sala")]
         public int SalaId { get; set; }
@@ -53,9 +46,21 @@ namespace ReservaCine.Models
         [Display(Name = "Reservas")]
         public List<Reserva> Reservas { get; set; }
         public DateTime Horario { get; set; }
+<<<<<<< HEAD
     }
     [ForeignKey(nameof(Sala))]
     public Guid SalaId { get; set; }
     public Sala Sala { get; set; }
 
+=======
+
+
+        [ForeignKey(nameof(Pelicula))]
+
+        public Guid PeliculaId { get; set; }
+        public Pelicula Pelicula{ get; set; }
+    }     
+    
+  
+>>>>>>> 84b7260731dcc376de55e63c633e359832cce119
 }

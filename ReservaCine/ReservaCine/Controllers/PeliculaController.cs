@@ -150,5 +150,23 @@ namespace ReservaCine.Controllers
         {
             return _context.Pelicula.Any(e => e.Id == id);
         }
+
+        /*public IActionResult Funciones(Guid id)
+        {
+            if (!PeliculaExists(id))
+            {
+                return NotFound();
+            }
+
+            var peliculaFuncion = _context.Pelicula
+                                            .Include(pelicula => pelicula.Funciones)
+                                                .ThenInclude(peliculaFuncion => Pelicula)
+                                            .FirstOrDefault(e => e.Id == id);
+
+            var Funciones = estudianteConMaterias.Materias.Select(matEst => matEst.Materia);
+
+            ViewData["PeliculaId"] = id;
+            return View(Funciones);*/
+        }
     }
-}
+

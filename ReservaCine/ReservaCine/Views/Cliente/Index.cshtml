@@ -33,9 +33,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.FechaAlta)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreUsuario)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -67,10 +65,16 @@
                 @Html.DisplayFor(modelItem => item.NombreUsuario)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+                {
+
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <label>|</label>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <label>|</label>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
+                </td>
         </tr>
 }
     </tbody>

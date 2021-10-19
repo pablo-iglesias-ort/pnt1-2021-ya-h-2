@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ReservaCine.Models
 {
     public class Pelicula
     {
+        [Key]
         public Guid Id { get; set; }
 
         [DisplayName("Fecha de estreno")]
@@ -28,15 +32,17 @@ namespace ReservaCine.Models
         [DisplayName("Duración")]
         public int Duracion { get; set; }
 
-        // [Required(ErrorMessage = "Ingrese un Género válido")]
-        
-        public Genero Genero { get; set; }
-
-        public List<Funcion> funciones { get; set; }
-
+      
        public Pelicula ()
         {
 
-        }        
+        }
+        
+       
+        public Genero Genero { get; set; }
+       public IEnumerable<Funcion> Funciones { get; set; } 
     }
+
+      
+
 }

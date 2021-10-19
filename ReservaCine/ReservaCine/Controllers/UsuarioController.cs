@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +15,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
+    [AllowAnonymous]
     public class UsuarioController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -20,135 +26,101 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Usuario
-        public async Task<IActionResult> Index()
+        public IActionResult Ingresar(string returnUrl)
         {
-            return View(await _context.Usuario.ToListAsync());
+            TempData["UrlIngreso"] = returnUrl;
+            return View();
         }
 
-        // GET: Usuario/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        [HttpPost]
+        public async Task<IActionResult> Ingresar(string usuario, string pass)
         {
-            if (id == null)
+           // Guardamos la URL a la que debemos redirigir al usuario
+            var urlIngreso = TempData["UrlIngreso"] as string;
+
+            // Verificamos que ambos esten informados
+            if (!string.IsNullOrEmpty(usuario) && !string.IsNullOrEmpty(pass))
             {
-                return NotFound();
+
+                // Verificamos que exista el usuario
+                var user = await _context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuario);
+                if (user != null)
+                {
+
+                    // Verificamos que coincida la contraseña
+                    var contraseña = Encoding.UTF8.GetBytes(pass);
+                    if (contraseña.SequenceEqual(user.Password))
+                    {
+                        // Creamos los Claims (credencial de acceso con informacion del usuario)
+                        ClaimsIdentity identidad = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        // Agregamos a la credencial el nombre de usuario
+                        identidad.AddClaim(new Claim(ClaimTypes.Name, usuario));
+                        // Agregamos a la credencial el nombre del estudiante/administrador
+                        identidad.AddClaim(new Claim(ClaimTypes.GivenName, user.Nombre));
+                        // Agregamos a la credencial el Rol
+                        identidad.AddClaim(new Claim(ClaimTypes.Role, user.Rol.ToString()));
+
+                        ClaimsPrincipal principal = new ClaimsPrincipal(identidad);
+
+                        // Ejecutamos el Login
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                        if (!string.IsNullOrEmpty(urlIngreso))
+                        {
+                            return Redirect(urlIngreso);
+                        }
+                        else
+                        {
+                            // Redirigimos a la pagina principal
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                }
             }
 
-            var usuario = await _context.Usuario
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
+            ViewBag.ErrorEnLogin = "Verifique el usuario y contraseña";
+            TempData["UrlIngreso"] = urlIngreso; // Volvemos a enviarla en el TempData para no perderla
+            return View();
 
-            return View(usuario);
         }
 
-        // GET: Usuario/Create
-        public IActionResult Create()
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Salir()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult AccesoDenegado()
         {
             return View();
         }
 
-        // POST: Usuario/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        public IActionResult Registrarse()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Usuario usuario)
+        public async Task<IActionResult> Registrarse(Usuario usuario, string pass)
         {
             if (ModelState.IsValid)
             {
                 usuario.Id = Guid.NewGuid();
+                usuario.Password = Encoding.UTF8.GetBytes(pass);
+                usuario.Rol = Rol.Cliente;
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Ingresar));
             }
             return View(usuario);
-        }
-
-        // GET: Usuario/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-            return View(usuario);
-        }
-
-        // POST: Usuario/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Usuario usuario)
-        {
-            if (id != usuario.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
-        }
-
-        // GET: Usuario/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuario
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
-        // POST: Usuario/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var usuario = await _context.Usuario.FindAsync(id);
-            _context.Usuario.Remove(usuario);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool UsuarioExists(Guid id)
-        {
-            return _context.Usuario.Any(e => e.Id == id);
         }
     }
 }
+

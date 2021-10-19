@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ReservaCine.Models;
 using System;
@@ -18,11 +19,13 @@ namespace ReservaCine.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public IActionResult Privacy()
         {
             return View();

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReservaCine.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ReservaCine
 {
@@ -24,8 +25,17 @@ namespace ReservaCine
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                opciones =>
+                {
+                    opciones.LoginPath = "/Usuario/Ingresar";
+                    opciones.AccessDeniedPath = "/Usuario/AccesoDenegado";
+                    opciones.LogoutPath = "/Usuario/Salir";
+                }
+            );
 
+            services.AddControllersWithViews();
+      
             //services.AddDbContext<ReservaCineContext>(options =>
             //        options.UseSqlite(Configuration.GetConnectionString("ReservaCineContext")));
             services.AddDbContext<ReservaCineContext>(opciones => opciones.UseSqlite("filename=BaseDeDatos.db"));
@@ -55,6 +65,8 @@ namespace ReservaCine
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseCookiePolicy();
         }
     }
 }
