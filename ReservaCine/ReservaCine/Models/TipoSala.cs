@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace ReservaCine.Models
 {
     public class TipoSala
     {   
+        [Key]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Ingrese un nombre")]
@@ -18,5 +21,10 @@ namespace ReservaCine.Models
 
         [Required(ErrorMessage = "Ingrese un precio valido")]
         public double Precio { get; set; }
+
+        [DisplayName("Tipo de Sala")]
+        [ForeignKey(nameof(Sala))]
+        public Guid SalaId { get; set; }
+        public Sala Sala { get; set; }
     }
 }

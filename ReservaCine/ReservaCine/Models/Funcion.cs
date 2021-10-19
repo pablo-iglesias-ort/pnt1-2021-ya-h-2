@@ -53,7 +53,9 @@ namespace ReservaCine.Models
         [Display(Name = "Reservas")]
         public List<Reserva> Reservas { get; set; }
         public DateTime Horario { get; set; }
-    }     
-    
-  
+    }
+    [ForeignKey(nameof(Sala))]
+    public Guid SalaId { get; set; }
+    public Sala Sala { get; set; }
+
 }
