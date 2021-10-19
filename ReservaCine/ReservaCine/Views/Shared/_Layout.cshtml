@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Reserva de Cine</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
@@ -30,22 +31,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Registrarse</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="TipoSala" asp-action="Index">Tipo de Salas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
-                        </li>
-
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TipoSala" asp-action="Index">Tipo de Salas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
                         </li>
@@ -56,6 +59,33 @@
 
                     </ul>
                 </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item float-right">
+                                <a class="nav-link text-success font-italic" asp-area="">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                            </li>
+                            <li class="nav-item float-right">
+                                <form asp-controller="Usuario" asp-action="Salir" method="post">
+                                    <button type="submit" class="nav-link text-danger">Salir</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-warning border border-primary bg-light" asp-area="" asp-controller="Usuario" asp-action="Ingresar">Ingresar</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+
             </div>
         </nav>
     </header>

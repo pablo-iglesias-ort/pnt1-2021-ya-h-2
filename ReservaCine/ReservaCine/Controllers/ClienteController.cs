@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
+    [Authorize]
     public class ClienteController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -54,8 +56,9 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta, NombreUsuario, Password")] Cliente cliente)
         {
+
             if (ModelState.IsValid)
             {
                 cliente.Id = Guid.NewGuid();
@@ -67,6 +70,7 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Cliente/Edit/5
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -87,7 +91,8 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Cliente cliente)
+        [Authorize(Roles = nameof(Rol.Cliente))]
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -118,6 +123,7 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Cliente/Delete/5
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -138,6 +144,7 @@ namespace ReservaCine.Controllers
         // POST: Cliente/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(Rol.Administrador))]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var cliente = await _context.Cliente.FindAsync(id);

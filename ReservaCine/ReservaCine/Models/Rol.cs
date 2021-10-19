@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 
 namespace ReservaCine.Models
 {
-
-    public class Cliente : Usuario
+    public enum Rol
     {
-        public IEnumerable<Reserva> Reservas { get; set; }
-
-
-        public Cliente ()
-        {
-
-        }
+        Administrador = 1,
+        Cliente = 2,
     }
 }

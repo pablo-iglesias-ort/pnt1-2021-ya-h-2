@@ -42,10 +42,7 @@ namespace ReservaCine.Migrations
                     b.Property<DateTime>("Horario")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PeliculaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("PeliculaId1")
+                    b.Property<Guid>("PeliculaId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SalaId")
@@ -56,7 +53,7 @@ namespace ReservaCine.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PeliculaId1");
+                    b.HasIndex("PeliculaId");
 
                     b.HasIndex("SalaId1");
 
@@ -72,7 +69,13 @@ namespace ReservaCine.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("PeliculaId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PeliculaId")
+                        .IsUnique();
 
                     b.ToTable("Genero");
                 });
@@ -94,17 +97,12 @@ namespace ReservaCine.Migrations
                     b.Property<DateTime>("FechaLanzamiento")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("GeneroId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GeneroId");
 
                     b.ToTable("Pelicula");
                 });
@@ -118,8 +116,11 @@ namespace ReservaCine.Migrations
                     b.Property<int>("CantidadButacas")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ClienteId")
+                    b.Property<Guid>("ClienteId")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("TEXT");
@@ -218,10 +219,13 @@ namespace ReservaCine.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(10);
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("BLOB")
                         .HasMaxLength(15);
+
+                    b.Property<int>("Rol")
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("Telefono")
                         .HasColumnType("INTEGER");
@@ -253,26 +257,32 @@ namespace ReservaCine.Migrations
             modelBuilder.Entity("ReservaCine.Models.Funcion", b =>
                 {
                     b.HasOne("ReservaCine.Models.Pelicula", "Pelicula")
-                        .WithMany("funciones")
-                        .HasForeignKey("PeliculaId1");
+                        .WithMany("Funciones")
+                        .HasForeignKey("PeliculaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ReservaCine.Models.Sala", "Sala")
                         .WithMany("funciones")
                         .HasForeignKey("SalaId1");
                 });
 
-            modelBuilder.Entity("ReservaCine.Models.Pelicula", b =>
+            modelBuilder.Entity("ReservaCine.Models.Genero", b =>
                 {
-                    b.HasOne("ReservaCine.Models.Genero", "Genero")
-                        .WithMany("Peliculas")
-                        .HasForeignKey("GeneroId");
+                    b.HasOne("ReservaCine.Models.Pelicula", "Pelicula")
+                        .WithOne("Genero")
+                        .HasForeignKey("ReservaCine.Models.Genero", "PeliculaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ReservaCine.Models.Reserva", b =>
                 {
                     b.HasOne("ReservaCine.Models.Cliente", "Cliente")
                         .WithMany("Reservas")
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ReservaCine.Models.Funcion", "Funcion")
                         .WithMany("Reservas")
