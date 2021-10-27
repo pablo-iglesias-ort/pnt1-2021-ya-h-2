@@ -19,11 +19,6 @@ namespace ReservaCine.Models
         {
         }
 
-        public Genero(string nombre)
-        {
-            Nombre = nombre;
-        }
-
         [ForeignKey(nameof(Pelicula))]
 
         public Guid PeliculaId { get; set; }

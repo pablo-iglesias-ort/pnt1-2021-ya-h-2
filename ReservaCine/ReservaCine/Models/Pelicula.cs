@@ -39,7 +39,7 @@ namespace ReservaCine.Models
         }
         
        
-        public Genero Genero { get; set; }
+       public Genero Genero { get; set; }
        public IEnumerable<Funcion> Funciones { get; set; } 
     }
 

@@ -28,9 +28,9 @@ namespace ReservaCine.Data
 			newCliente.Email = "san.a@hotmail.com";
 			newCliente.Domicilio= "as 1245";
 			newCliente.Telefono = 3234235245;
-			//newCliente.NombreUsuario = "assa";
-			//newCliente.Password = Encoding.ASCII.GetBytes("4564");
-			//newCliente.Reserva = new Reserva();
+			newCliente.NombreUsuario = "assa";
+			newCliente.Password = seguridad.Encriptar pass("1234");
+			 
 			
 			newCliente.FechaAlta = DateTime.Now;
 			context.Cliente.Add(newCliente);
@@ -50,6 +50,7 @@ namespace ReservaCine.Data
 			nuevaPelicula.Titulo = "La viuda Negra";
 			nuevaPelicula.Id = Guid.NewGuid();
 			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
+			nuevaPelicula.Genero = new Genero();
 			nuevaPelicula.Duracion = 180;
 			context.Pelicula.Add(nuevaPelicula); 
 			context.SaveChanges();
@@ -57,6 +58,22 @@ namespace ReservaCine.Data
 			var pelicula= context.Pelicula.First();
 			
 
+			if (context.Genero.Any())
+            {
+				return;
+            }
+
+			var nuevoGenero = new Genero();
+			nuevoGenero.Nombre = "Acción";
+			nuevoGenero.Id = Guid.NewGuid();
+			nuevoGenero.PeliculaId = nuevaPelicula.Id;
+			context.Genero.Add(nuevoGenero);
+			context.SaveChanges();
+
+			var genero = context.Genero.First();
+
 			}
+
+			
     }
 }

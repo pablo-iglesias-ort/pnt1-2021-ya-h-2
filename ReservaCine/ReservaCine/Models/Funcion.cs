@@ -49,7 +49,6 @@ namespace ReservaCine.Models
 
 
         [ForeignKey(nameof(Pelicula))]
-
         public Guid PeliculaId { get; set; }
         public Pelicula Pelicula{ get; set; }
     }     

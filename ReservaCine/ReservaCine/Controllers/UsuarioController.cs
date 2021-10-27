@@ -114,13 +114,14 @@ namespace ReservaCine.Controllers
             {
                 usuario.Id = Guid.NewGuid();
                 usuario.Password = Encoding.UTF8.GetBytes(pass);
-                usuario.Rol = Rol.Cliente;
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Ingresar));
             }
             return View(usuario);
         }
+
+        
     }
 }
 
