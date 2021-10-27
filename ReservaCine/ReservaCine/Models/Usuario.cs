@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace ReservaCine.Models
 {
-    public class Usuario
+    public abstract class Usuario
     {
         [Key]
         public Guid Id { get; set; }
@@ -21,7 +21,7 @@ namespace ReservaCine.Models
         public String Apellido { get; set; }
 
         [Required(ErrorMessage = "Ingrese un DNI válido")]
-        [Range(1000000000, 99999999999, ErrorMessage ="Ingrese DNI válido")]
+        [Range(10000000, 99999999999, ErrorMessage ="Ingrese DNI válido")]
         public long DNI { get; set; }
 
         [Required(ErrorMessage = "Ingrese un Email válido")]
@@ -54,7 +54,7 @@ namespace ReservaCine.Models
         public byte[] Password { get; set; }
 
        [Required]
-       public Rol Rol { get; set; }
+       public abstract Rol Rol { get; }
         
         public Usuario()
         {

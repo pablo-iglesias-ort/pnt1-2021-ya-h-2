@@ -10,6 +10,7 @@ namespace ReservaCine.Models
     {
         public IEnumerable<Reserva> Reservas { get; set; }
 
+        public override Rol Rol => Rol.Cliente;
 
         public Cliente ()
         {

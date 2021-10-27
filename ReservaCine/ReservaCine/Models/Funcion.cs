@@ -46,21 +46,12 @@ namespace ReservaCine.Models
         [Display(Name = "Reservas")]
         public List<Reserva> Reservas { get; set; }
         public DateTime Horario { get; set; }
-<<<<<<< HEAD
-    }
-    [ForeignKey(nameof(Sala))]
-    public Guid SalaId { get; set; }
-    public Sala Sala { get; set; }
-
-=======
-
 
         [ForeignKey(nameof(Pelicula))]
-
         public Guid PeliculaId { get; set; }
-        public Pelicula Pelicula{ get; set; }
-    }     
-    
-  
->>>>>>> 84b7260731dcc376de55e63c633e359832cce119
+        public Pelicula Pelicula { get; set; }
+
+    }
+
+
 }
