@@ -30,7 +30,7 @@ namespace ReservaCine.Data
 			newCliente.Telefono = 3234235245;
 			newCliente.NombreUsuario = "assa";
 			newCliente.Password = Encoding.ASCII.GetBytes("4564");
-			
+
 
 			newCliente.FechaAlta = DateTime.Now;
 			context.Cliente.Add(newCliente);
@@ -69,7 +69,7 @@ namespace ReservaCine.Data
 			newEmpleado.Telefono = 1130659588;
 			newEmpleado.Legajo = 11564665;
 			newEmpleado.NombreUsuario = "Patokpo123";
-			newEmpleado.Password = Encoding.ASCII.GetBytes("4564");
+			newEmpleado.Password = Encoding.ASCII.GetBytes("pato1998");
 			newEmpleado.FechaAlta = DateTime.Now;
 			context.Empleado.Add(newEmpleado);
 			context.SaveChanges();
@@ -79,12 +79,14 @@ namespace ReservaCine.Data
 				return;
 			}
 
-			var newSala = new Sala();
-			newSala.Id = Guid.NewGuid();
-			newSala.CapacidadButacas = 158;
-			newSala.Numero = 912;
-			newSala.tipoSala = new TipoSala();
-			newSala.Funciones = new List<Funcion>();
+			var newSala = new Sala()
+			{
+				Id = Guid.NewGuid(),
+				CapacidadButacas = 125,
+				Numero = 912,
+				
+
+		};
 			context.Sala.Add(newSala);
 			context.SaveChanges();
 
@@ -93,14 +95,18 @@ namespace ReservaCine.Data
 				return;
 			}
 
-			var newTipoSala= new TipoSala();
-			newTipoSala.Id = Guid.NewGuid();
-			newTipoSala.Nombre = "Sala Dorada";
-			newTipoSala.Precio = 2000;
-			newTipoSala.Sala = new Sala();
-			newTipoSala.SalaId = newTipoSala.Sala.Id;
+            var newTipoSala = new TipoSala
+            {
+                Id = Guid.NewGuid(),
+                Nombre = "Sala Dorada",
+                Precio = 2000,
+                SalaId = newSala.Id
+				
+		};
+		context.TipoSala.Add(newTipoSala);
+			context.SaveChanges();
 
-		}
+        }
 
 
 

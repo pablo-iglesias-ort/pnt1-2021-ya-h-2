@@ -123,6 +123,7 @@ namespace ReservaCine.Controllers
                 else
                 {
                     var nuevoCliente = new Cliente();
+
                     
                     _context.Cliente.Add(nuevoCliente);
                 }
