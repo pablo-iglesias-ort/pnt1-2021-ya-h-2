@@ -3,36 +3,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ReservaCine.Migrations
 {
-    public partial class Versión_2 : Migration
+    public partial class Versión7 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Pelicula",
+                name: "Genero",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    FechaLanzamiento = table.Column<DateTime>(nullable: false),
-                    Titulo = table.Column<string>(maxLength: 50, nullable: false),
-                    Descripcion = table.Column<string>(maxLength: 6000, nullable: false),
-                    Duracion = table.Column<int>(nullable: false)
+                    Nombre = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pelicula", x => x.Id);
+                    table.PrimaryKey("PK_Genero", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TipoSala",
+                name: "Sala",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nombre = table.Column<string>(maxLength: 20, nullable: false),
-                    Precio = table.Column<double>(nullable: false)
+                    Numero = table.Column<int>(nullable: false),
+                    CapacidadButacas = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TipoSala", x => x.Id);
+                    table.PrimaryKey("PK_Sala", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +46,6 @@ namespace ReservaCine.Migrations
                     FechaAlta = table.Column<DateTime>(nullable: false),
                     NombreUsuario = table.Column<string>(maxLength: 10, nullable: false),
                     Password = table.Column<byte[]>(maxLength: 15, nullable: false),
-                    Rol = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Legajo = table.Column<int>(nullable: true)
                 },
@@ -59,42 +55,45 @@ namespace ReservaCine.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genero",
+                name: "Pelicula",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nombre = table.Column<string>(nullable: true),
-                    PeliculaId = table.Column<Guid>(nullable: false)
+                    FechaLanzamiento = table.Column<DateTime>(nullable: false),
+                    Titulo = table.Column<string>(maxLength: 50, nullable: false),
+                    Descripcion = table.Column<string>(maxLength: 6000, nullable: false),
+                    Duracion = table.Column<int>(nullable: false),
+                    GeneroId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genero", x => x.Id);
+                    table.PrimaryKey("PK_Pelicula", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Genero_Pelicula_PeliculaId",
-                        column: x => x.PeliculaId,
-                        principalTable: "Pelicula",
+                        name: "FK_Pelicula_Genero_GeneroId",
+                        column: x => x.GeneroId,
+                        principalTable: "Genero",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sala",
+                name: "TipoSala",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Numero = table.Column<int>(nullable: false),
-                    tipoSalaId = table.Column<Guid>(nullable: true),
-                    CapacidadButacas = table.Column<int>(nullable: false)
+                    Nombre = table.Column<string>(maxLength: 20, nullable: false),
+                    Precio = table.Column<double>(nullable: false),
+                    SalaId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sala", x => x.Id);
+                    table.PrimaryKey("PK_TipoSala", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sala_TipoSala_tipoSalaId",
-                        column: x => x.tipoSalaId,
-                        principalTable: "TipoSala",
+                        name: "FK_TipoSala_Sala_SalaId",
+                        column: x => x.SalaId,
+                        principalTable: "Sala",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -168,10 +167,9 @@ namespace ReservaCine.Migrations
                 column: "SalaId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Genero_PeliculaId",
-                table: "Genero",
-                column: "PeliculaId",
-                unique: true);
+                name: "IX_Pelicula_GeneroId",
+                table: "Pelicula",
+                column: "GeneroId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reserva_ClienteId",
@@ -184,18 +182,19 @@ namespace ReservaCine.Migrations
                 column: "FuncionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sala_tipoSalaId",
-                table: "Sala",
-                column: "tipoSalaId");
+                name: "IX_TipoSala_SalaId",
+                table: "TipoSala",
+                column: "SalaId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Genero");
+                name: "Reserva");
 
             migrationBuilder.DropTable(
-                name: "Reserva");
+                name: "TipoSala");
 
             migrationBuilder.DropTable(
                 name: "Usuario");
@@ -210,7 +209,7 @@ namespace ReservaCine.Migrations
                 name: "Sala");
 
             migrationBuilder.DropTable(
-                name: "TipoSala");
+                name: "Genero");
         }
     }
 }

@@ -4,12 +4,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
-    <h4>Pelicula</h4>
+    <h4>Película</h4>
     <hr />
-    <dl class="row">
+    <dl class="row text-light">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FechaLanzamiento)
         </dt>
@@ -44,6 +44,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole(nameof(Rol.Administrador)))
+    {
+      <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+      
+    }
+       <a asp-action="Funcion" asp-route-id="@Model.Id">Ver Funciones</a> |@*agregar link de funciones y se codif en el controllador de peli*@
+       <a asp-action="Index">Volver a la lista</a>
 </div>

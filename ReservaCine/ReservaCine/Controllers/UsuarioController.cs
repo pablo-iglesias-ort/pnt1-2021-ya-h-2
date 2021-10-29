@@ -33,33 +33,35 @@ namespace ReservaCine.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Ingresar(string usuario, string pass)
+        public async Task<IActionResult> Ingresar(string NombreUsuario, string Password)
         {
            // Guardamos la URL a la que debemos redirigir al usuario
             var urlIngreso = TempData["UrlIngreso"] as string;
 
             // Verificamos que ambos esten informados
-            if (!string.IsNullOrEmpty(usuario) && !string.IsNullOrEmpty(pass))
+            if (!string.IsNullOrEmpty(NombreUsuario) && !string.IsNullOrEmpty(Password))
             {
 
                 // Verificamos que exista el usuario
-                var user = await _context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == usuario);
+                var user = await _context.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == NombreUsuario);
                 if (user != null)
                 {
 
                     // Verificamos que coincida la contraseña
-                    var contraseña = Encoding.UTF8.GetBytes(pass);
+                    var contraseña = Encoding.ASCII.GetBytes(Password);
                     if (contraseña.SequenceEqual(user.Password))
                     {
-                        // Creamos los Claims (credencial de acceso con informacion del usuario)
+                        // Creamos los Claims (credencial de acceso con informacion del usuario)-- cookies
                         ClaimsIdentity identidad = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
                         // Agregamos a la credencial el nombre de usuario
-                        identidad.AddClaim(new Claim(ClaimTypes.Name, usuario));
+                        identidad.AddClaim(new Claim(ClaimTypes.Name, NombreUsuario));
                         // Agregamos a la credencial el nombre del estudiante/administrador
                         identidad.AddClaim(new Claim(ClaimTypes.GivenName, user.Nombre));
                         // Agregamos a la credencial el Rol
                         identidad.AddClaim(new Claim(ClaimTypes.Role, user.Rol.ToString()));
+                        // Agregamos el Id de Usuario
+                        identidad.AddClaim(new Claim("IdDeUsuario", user.Id.ToString()));
 
                         ClaimsPrincipal principal = new ClaimsPrincipal(identidad);
 
@@ -108,12 +110,32 @@ namespace ReservaCine.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registrarse(Usuario usuario, string pass)
+        public async Task<IActionResult> Registrarse(Usuario usuario, string pass, int? legajo, bool altaEmpleado = false)
         {
             if (ModelState.IsValid)
             {
+
+                if (altaEmpleado)
+                {
+                    var nuevoEmpleado = new Empleado();
+                    nuevoEmpleado.NombreUsuario = usuario.Nombre + usuario.DNI.ToString();
+                    //nuevoEmpleado.Password = seguridad.EncriptarPass(usuario.DNI.ToString());
+                    _context.Empleado.Add(nuevoEmpleado);
+                }
+                else
+                {
+                    var nuevoCliente = new Cliente();
+                    
+                    _context.Cliente.Add(nuevoCliente);
+                }
+                                
+
                 usuario.Id = Guid.NewGuid();
-                usuario.Password = Encoding.UTF8.GetBytes(pass);
+                usuario.Password = Encoding.ASCII.GetBytes(pass);
+                if (legajo == null)
+                {
+                    
+                }
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Ingresar));

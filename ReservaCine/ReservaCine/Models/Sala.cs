@@ -11,6 +11,7 @@ namespace ReservaCine.Models
 {
     public class Sala
     { 
+        [Key]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Ingrese un número")]
@@ -26,7 +27,7 @@ namespace ReservaCine.Models
         public int CapacidadButacas { get; set; }
 
         
-        public List<Funcion> funciones { get; set; }
+        public IEnumerable<Funcion> Funciones { get; set; }
 
     }
 }

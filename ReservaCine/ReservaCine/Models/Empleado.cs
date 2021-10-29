@@ -13,7 +13,7 @@ namespace ReservaCine.Models
         [Required(ErrorMessage ="Ingrese el legajo")]
         [Range(0, 99999999999, ErrorMessage = "Ingrese un número válido")]
         public int Legajo { get; set; }
-        
+         
 
         public Empleado ()
         {
@@ -21,3 +21,5 @@ namespace ReservaCine.Models
         }
     }
 }
+        
+    

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
+    [Authorize]
     public class EmpleadoController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -44,10 +47,13 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Empleado/Create
+        
         public IActionResult Create()
         {
             return View();
         }
+
+        [Authorize(Roles = nameof(Rol.Administrador))]
 
         // POST: Empleado/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

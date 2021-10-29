@@ -148,7 +148,7 @@ namespace ReservaCine.Controllers
 
         private bool PeliculaExists(Guid id)
         {
-            return _context.Pelicula.Any(e => e.Id == id);
+            return _context.Pelicula.Any(p => p.Id == id);
         }
 
         public IActionResult Funciones(Guid id)

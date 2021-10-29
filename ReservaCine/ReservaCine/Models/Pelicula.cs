@@ -37,9 +37,11 @@ namespace ReservaCine.Models
         {
 
         }
-        
-       
-       public Genero Genero { get; set; }
+
+        [ForeignKey(nameof(Genero))]
+        public Guid GeneroId { get; set; }
+        public Genero Genero { get; set; }
+
        public IEnumerable<Funcion> Funciones { get; set; } 
     }
 

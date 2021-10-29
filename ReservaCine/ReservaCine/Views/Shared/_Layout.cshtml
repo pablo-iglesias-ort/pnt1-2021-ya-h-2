@@ -2,17 +2,18 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Reserva de Cine</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Reserva de Cine </title>
+
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">@*cambio color de la barra cabecera*@
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Reserva de Cine</a>
+                <a class="navbar-brand font-weight-bold text-danger" asp-area="" asp-controller="Home" asp-action="Index">Reserva de Cine</a> @*agrego color y estilo*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,43 +21,44 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pelicula" asp-action="Index">Películas</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Pelicula" asp-action="Index">Películas</a>
                         </li>
-                        
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TipoSala" asp-action="Index">Tipo de Salas</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="TipoSala" asp-action="Index">Tipo de Salas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
-                        </li>
+                        @*<li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
+                        </li>*@
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
                         </li>
 
                     </ul>
                 </div>
+
 
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -67,7 +69,7 @@
                             </li>
                             <li class="nav-item float-right">
                                 <form asp-controller="Usuario" asp-action="Salir" method="post">
-                                    <button type="submit" class="nav-link text-danger">Salir</button>
+                                    <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
                                 </form>
                             </li>
                         </ul>
@@ -78,7 +80,7 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-warning border border-primary bg-light" asp-area="" asp-controller="Usuario" asp-action="Ingresar">Ingresar</a>
+                                <a class="nav-link font-weight-bold text-light border border-dark btn btn-danger" asp-area="" asp-controller="Usuario" asp-action="Ingresar">Ingresar</a>@*agrego estilo al botón*@
                             </li>
                         </ul>
                     </div>
@@ -87,9 +89,11 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            
         </main>
     </div>
 
