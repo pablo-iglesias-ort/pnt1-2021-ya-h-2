@@ -65,7 +65,7 @@
                 @Html.DisplayFor(modelItem => item.NombreUsuario)
             </td>
             <td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
                 {
 
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
@@ -74,7 +74,8 @@
                     <label>|</label>
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 }
-                </td>
+            </td>
+            
         </tr>
 }
     </tbody>

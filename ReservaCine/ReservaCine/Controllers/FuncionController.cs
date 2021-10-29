@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace ReservaCine.Controllers
             return View(await _context.Funcion.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Funcion/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -42,13 +44,15 @@ namespace ReservaCine.Controllers
 
             return View(funcion);
         }
-
+        
+        
         // GET: Funcion/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))] 
         // POST: Funcion/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -82,6 +86,7 @@ namespace ReservaCine.Controllers
             return View(funcion);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Funcion/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -135,6 +140,7 @@ namespace ReservaCine.Controllers
             return View(funcion);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Funcion/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -13,6 +13,8 @@ namespace ReservaCine.Models
         [Key]
         public Guid Id { get; set; }
 
+        [ForeignKey(nameof(Funcion))]
+        public Guid FuncionId { get; set; }
         [DisplayName("Función")]
         public Funcion Funcion { get; set; }
 
@@ -31,7 +33,7 @@ namespace ReservaCine.Models
         [DisplayName("Cantidad de butacas")]
         public int CantidadButacas { get; set; }
 
-        public bool Estado { get; set; }
+        public bool Activa { get; set; }
 
 
      }

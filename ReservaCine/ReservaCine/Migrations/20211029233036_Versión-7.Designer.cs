@@ -9,8 +9,13 @@ using ReservaCine.Data;
 namespace ReservaCine.Migrations
 {
     [DbContext(typeof(ReservaCineContext))]
+<<<<<<< HEAD:ReservaCine/ReservaCine/Migrations/20211029233036_Versión-7.Designer.cs
     [Migration("20211029233036_Versión-7")]
     partial class Versión7
+=======
+    [Migration("20211029231301_Versión-6")]
+    partial class Versión6
+>>>>>>> cc9eaacbe7a1f432eafe7a2506fc146fb74e4ce6:ReservaCine/ReservaCine/Migrations/20211029231301_Versión-6.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,23 +46,17 @@ namespace ReservaCine.Migrations
                     b.Property<DateTime>("Hora")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Horario")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("PeliculaId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SalaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("SalaId1")
+                    b.Property<Guid>("SalaId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PeliculaId");
 
-                    b.HasIndex("SalaId1");
+                    b.HasIndex("SalaId");
 
                     b.ToTable("Funcion");
                 });
@@ -114,19 +113,19 @@ namespace ReservaCine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Activa")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CantidadButacas")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("ClienteId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("FechaAlta")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("FuncionId")
+                    b.Property<Guid>("FuncionId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -263,7 +262,9 @@ namespace ReservaCine.Migrations
 
                     b.HasOne("ReservaCine.Models.Sala", "Sala")
                         .WithMany("Funciones")
-                        .HasForeignKey("SalaId1");
+                        .HasForeignKey("SalaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ReservaCine.Models.Pelicula", b =>
@@ -285,7 +286,9 @@ namespace ReservaCine.Migrations
 
                     b.HasOne("ReservaCine.Models.Funcion", "Funcion")
                         .WithMany("Reservas")
-                        .HasForeignKey("FuncionId");
+                        .HasForeignKey("FuncionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ReservaCine.Models.TipoSala", b =>

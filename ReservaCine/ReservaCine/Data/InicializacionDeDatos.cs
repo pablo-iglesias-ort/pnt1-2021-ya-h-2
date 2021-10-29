@@ -39,6 +39,27 @@ namespace ReservaCine.Data
 
 			var Cliente = context.Cliente.First();
 
+			if (context.Empleado.Any())
+			{
+				return;
+			}
+
+			var newEmpleado = new Empleado();
+			newEmpleado.Id = Guid.NewGuid();
+			newEmpleado.Nombre = "Patricio";
+			newEmpleado.Apellido = "Castellano";
+			newEmpleado.DNI = 41623687;
+			newEmpleado.Email = "patriciocastell@hotmail.com";
+			newEmpleado.Domicilio = "Av etc. 245";
+			newEmpleado.Telefono = 1130659588;
+			newEmpleado.Legajo = 11564665;
+			newEmpleado.NombreUsuario = "Patokpo123";
+			newEmpleado.Password = Encoding.ASCII.GetBytes("pato1998");
+			newEmpleado.FechaAlta = DateTime.Now;
+			context.Empleado.Add(newEmpleado);
+			context.SaveChanges();
+
+			var Empleado = context.Empleado.First();
 
 			if (context.Pelicula.Any())
 			{
@@ -50,8 +71,6 @@ namespace ReservaCine.Data
 			nuevaPelicula.Titulo = "La viuda Negra";
 			nuevaPelicula.Id = Guid.NewGuid();
 			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
-			nuevaPelicula.Genero = new Genero();
-			nuevaPelicula.Genero.Nombre = "Acción";
 			nuevaPelicula.Duracion = 180;
 			context.Pelicula.Add(nuevaPelicula);
 			context.SaveChanges();
@@ -79,54 +98,79 @@ namespace ReservaCine.Data
 				return;
 			}
 
-			var newEmpleado = new Empleado();
-			newEmpleado.Id = Guid.NewGuid();
-			newEmpleado.Nombre = "Patricio";
-			newEmpleado.Apellido = "Castellano";
-			newEmpleado.DNI = 41623687;
-			newEmpleado.Email = "patriciocastell@hotmail.com";
-			newEmpleado.Domicilio = "Av etc. 245";
-			newEmpleado.Telefono = 1130659588;
-			newEmpleado.Legajo = 11564665;
-			newEmpleado.NombreUsuario = "Patokpo123";
-			newEmpleado.Password = Encoding.ASCII.GetBytes("4564");
-			newEmpleado.FechaAlta = DateTime.Now;
-			context.Empleado.Add(newEmpleado);
-			context.SaveChanges();
-
-			if (context.Sala.Any())
+			var newSala = new Sala()
 			{
-				return;
-			}
+				Id = Guid.NewGuid(),
+				CapacidadButacas = 125,
+				Numero = 912,
+				
 
-			var newSala = new Sala();
-			newSala.Id = Guid.NewGuid();
-			newSala.CapacidadButacas = 158;
-			newSala.Numero = 912;
-			newSala.tipoSala = new TipoSala();
-			newSala.Funciones = new List<Funcion>();
+		};
 			context.Sala.Add(newSala);
 			context.SaveChanges();
 
-			if (context.TipoSala.Any())
-			{
-				return;
-			}
-
-			var newTipoSala = new TipoSala();
-			newTipoSala.Id = Guid.NewGuid();
-			newTipoSala.Nombre = "Sala Dorada";
-			newTipoSala.Precio = 2000;
-			newTipoSala.Sala = new Sala();
-			newTipoSala.SalaId = newTipoSala.Sala.Id;
-
-
+			var Sala = context.Sala.First();
 
 			if (context.Funcion.Any())
 			{
 				// Si ya hay datos aqui, significa que ya los hemos creado previamente
 				return;
 			}
+
+			var nuevaFuncion = new Funcion();
+			nuevaFuncion.Id = Guid.NewGuid();
+			nuevaFuncion.CantButacasDisponibles = 20;
+			nuevaFuncion.Confirmar = true;
+			nuevaFuncion.Descripcion = "Película ATP";
+			nuevaFuncion.PeliculaId = nuevaPelicula.Id;
+			nuevaFuncion.SalaId = newSala.Id;
+			nuevaFuncion.Fecha = DateTime.Now.AddDays(14);
+			// nuevaFuncion.Hora = Time
+			// AVERIGUAR COMO CARGAR HORARIO 
+
+			context.Funcion.Add(nuevaFuncion);
+			context.SaveChanges();
+
+			var Funcion = context.Funcion.First();
+
+			if (context.Reserva.Any())
+			{
+				// Si ya hay datos aqui, significa que ya los hemos creado previamente
+				return;
+			}
+
+			var nuevaReserva = new Reserva();
+			nuevaReserva.Id = Guid.NewGuid();
+			nuevaReserva.CantidadButacas = 4;
+			nuevaReserva.ClienteId = newCliente.Id;
+			nuevaReserva.Activa = true;
+			nuevaReserva.FechaAlta = DateTime.Now;
+			nuevaReserva.FuncionId = nuevaFuncion.Id;
+		
+			context.Reserva.Add(nuevaReserva);
+			context.SaveChanges();
+
+			var Reserva = context.Reserva.First();
+						
+
+			if (context.TipoSala.Any())
+			{
+				return;
+			}
+
+            var newTipoSala = new TipoSala
+            {
+                Id = Guid.NewGuid(),
+                Nombre = "Sala Dorada",
+                Precio = 2000,
+                SalaId = newSala.Id
+				
+		};
+		context.TipoSala.Add(newTipoSala);
+			context.SaveChanges();
+
+			var TipoSala = context.TipoSala.First();
+		}
 
 			var newFuncion = new Funcion();
 			newFuncion.Id = Guid.NewGuid();

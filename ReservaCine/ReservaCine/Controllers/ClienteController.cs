@@ -11,7 +11,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class ClienteController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -50,7 +50,8 @@ namespace ReservaCine.Controllers
         {
             return View();
         }
-
+        
+        [AllowAnonymous]
         // POST: Cliente/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -70,7 +71,7 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Cliente/Edit/5
-        [Authorize(Roles = nameof(Rol.Cliente))]
+        
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -86,12 +87,13 @@ namespace ReservaCine.Controllers
             return View(cliente);
         }
 
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // POST: Cliente/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(Rol.Cliente))]
+       
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta")] Cliente cliente)
         {
             if (id != cliente.Id)
@@ -123,7 +125,7 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Cliente/Delete/5
-        [Authorize(Roles = nameof(Rol.Administrador))]
+        
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -141,6 +143,7 @@ namespace ReservaCine.Controllers
             return View(cliente);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Cliente/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

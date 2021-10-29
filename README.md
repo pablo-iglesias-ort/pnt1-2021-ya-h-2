@@ -181,15 +181,12 @@ De la misma manera Uds. deben definir los tipos de datos asociados a cada una de
             - Debe ser en base a la oferta de la pelicula seleccionada.
             - El cliente, solo puede tener una reserva activa.
         - El cliente, podrá en todo momento, ver si tiene o no una reserva para una función futura.            
-            - Podrá cancelarla, solo si es hasta 24hs. antes.
-- Puede ver las reservas pasadas.
 - Puede actualizar datos de contacto, como el telefono, dirección,etc.. Pero no puede modificar su DNI, Nombre, Apellido, etc.
 
 **Empleado**
 - El empleado puede listar las reservas por cada función "en el futuro" o "en el pasado".
 - El empleado, puede habilitar o cancelar funciones. 
     - Solo pueden cancelarse, si no tiene reservas.
-- También, puede ver un balance de recaudación por pelicula en mes calendario. 
 - Puede dar de alta las Salas, Peliculas, etc. 
     - Nadie, puede eliminar las salas, pero si puede cambiar el tipo.
 
@@ -204,7 +201,7 @@ De la misma manera Uds. deben definir los tipos de datos asociados a cada una de
 **Aplicación General**
 - Información institucional.
 - Se deben listar las peliculas en cartelera sin iniciar sesión.
-- Poder reservar, automáticamente desde la una pelicula (con solicitud de inicio de sesión previo si fuese requerido)
+- Poder reservar, automáticamente desde una pelicula (con solicitud de inicio de sesión previo si fuese requerido)
 - Por cada pelicula, se tiene que poder listar las funciones activas para la proxima semana. 
 - La disponibilidad de las funciones, solo puede verse al tener una sesión iniciada como cliente.
 
