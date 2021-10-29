@@ -24,10 +24,10 @@ namespace ReservaCine.Models
         public DateTime Hora { get; set; }
 
 
-        [Required(ErrorMessage = "Por favor ingrese una descripcion")]
-        [MaxLength(20, ErrorMessage = "Por favor ingrese un maximo de 20 caracteres")]
-        [MinLength(2, ErrorMessage = "Por favor ingrese un minimo de 2 caracteres")]
-        [Display(Name = "Descripcion")]
+        [Required(ErrorMessage = "Por favor ingrese una descripción")]
+        [MaxLength(20, ErrorMessage = "Por favor ingrese un máximo de 20 caracteres")]
+        [MinLength(2, ErrorMessage = "Por favor ingrese un mínimo de 2 caracteres")]
+        [Display(Name = "Descripción")]
         public string Descripcion { get; set; }
 
 
@@ -39,14 +39,13 @@ namespace ReservaCine.Models
 
         [Required(ErrorMessage = "Por favor ingresar sala")]
         [Display(Name = "Sala")]
-        public int SalaId { get; set; }
+        public Guid SalaId { get; set; }
         public Sala Sala { get; set; }
 
 
         [Display(Name = "Reservas")]
-        public List<Reserva> Reservas { get; set; }
-        public DateTime Horario { get; set; }
-
+        public IEnumerable<Reserva> Reservas { get; set; }
+      
         [ForeignKey(nameof(Pelicula))]
         public Guid PeliculaId { get; set; }
         public Pelicula Pelicula { get; set; }

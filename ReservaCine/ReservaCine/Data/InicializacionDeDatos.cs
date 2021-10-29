@@ -30,7 +30,7 @@ namespace ReservaCine.Data
 			newCliente.Telefono = 3234235245;
 			newCliente.NombreUsuario = "assa";
 			newCliente.Password = Encoding.ASCII.GetBytes("4564");
-			
+
 
 			newCliente.FechaAlta = DateTime.Now;
 			context.Cliente.Add(newCliente);
@@ -38,22 +38,6 @@ namespace ReservaCine.Data
 
 			var Cliente = context.Cliente.First();
 
-
-			if (context.Pelicula.Any())
-			{
-				return;
-			}
-
-			var nuevaPelicula = new Pelicula();
-			nuevaPelicula.FechaLanzamiento = DateTime.Now.Date;
-			nuevaPelicula.Titulo = "La viuda Negra";
-			nuevaPelicula.Id = Guid.NewGuid();
-			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
-			nuevaPelicula.Duracion = 180;
-			context.Pelicula.Add(nuevaPelicula);
-			context.SaveChanges();
-
-			var pelicula = context.Pelicula.First();
 			if (context.Empleado.Any())
 			{
 				return;
@@ -74,6 +58,24 @@ namespace ReservaCine.Data
 			context.Empleado.Add(newEmpleado);
 			context.SaveChanges();
 
+			var Empleado = context.Empleado.First();
+
+			if (context.Pelicula.Any())
+			{
+				return;
+			}
+
+			var nuevaPelicula = new Pelicula();
+			nuevaPelicula.FechaLanzamiento = DateTime.Now.Date;
+			nuevaPelicula.Titulo = "La viuda Negra";
+			nuevaPelicula.Id = Guid.NewGuid();
+			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
+			nuevaPelicula.Duracion = 180;
+			context.Pelicula.Add(nuevaPelicula);
+			context.SaveChanges();
+
+			var pelicula = context.Pelicula.First();
+
 			if (context.Sala.Any())
 			{
 				return;
@@ -88,6 +90,50 @@ namespace ReservaCine.Data
 			context.Sala.Add(newSala);
 			context.SaveChanges();
 
+			var Sala = context.Sala.First();
+
+			if (context.Funcion.Any())
+			{
+				// Si ya hay datos aqui, significa que ya los hemos creado previamente
+				return;
+			}
+
+			var nuevaFuncion = new Funcion();
+			nuevaFuncion.Id = Guid.NewGuid();
+			nuevaFuncion.CantButacasDisponibles = 20;
+			nuevaFuncion.Confirmar = true;
+			nuevaFuncion.Descripcion = "Película ATP";
+			nuevaFuncion.PeliculaId = nuevaPelicula.Id;
+			nuevaFuncion.SalaId = newSala.Id;
+			nuevaFuncion.Fecha = DateTime.Now.AddDays(14);
+			// nuevaFuncion.Hora = Time
+			// AVERIGUAR COMO CARGAR HORARIO 
+
+			context.Funcion.Add(nuevaFuncion);
+			context.SaveChanges();
+
+			var Funcion = context.Funcion.First();
+
+			if (context.Reserva.Any())
+			{
+				// Si ya hay datos aqui, significa que ya los hemos creado previamente
+				return;
+			}
+
+			var nuevaReserva = new Reserva();
+			nuevaReserva.Id = Guid.NewGuid();
+			nuevaReserva.CantidadButacas = 4;
+			nuevaReserva.ClienteId = newCliente.Id;
+			nuevaReserva.Activa = true;
+			nuevaReserva.FechaAlta = DateTime.Now;
+			nuevaReserva.FuncionId = nuevaFuncion.Id;
+		
+			context.Reserva.Add(nuevaReserva);
+			context.SaveChanges();
+
+			var Reserva = context.Reserva.First();
+						
+
 			if (context.TipoSala.Any())
 			{
 				return;
@@ -100,6 +146,7 @@ namespace ReservaCine.Data
 			newTipoSala.Sala = new Sala();
 			newTipoSala.SalaId = newTipoSala.Sala.Id;
 
+			var TipoSala = context.TipoSala.First();
 		}
 
 
