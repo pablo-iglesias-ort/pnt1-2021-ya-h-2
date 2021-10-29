@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ReservaCine.Migrations
 {
-    public partial class Versión4 : Migration
+    public partial class Versión6 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,9 +86,7 @@ namespace ReservaCine.Migrations
                     Descripcion = table.Column<string>(maxLength: 20, nullable: false),
                     CantButacasDisponibles = table.Column<int>(nullable: false),
                     Confirmar = table.Column<bool>(nullable: false),
-                    SalaId = table.Column<int>(nullable: false),
-                    SalaId1 = table.Column<Guid>(nullable: true),
-                    Horario = table.Column<DateTime>(nullable: false),
+                    SalaId = table.Column<Guid>(nullable: false),
                     PeliculaId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -101,11 +99,11 @@ namespace ReservaCine.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Funcion_Sala_SalaId1",
-                        column: x => x.SalaId1,
+                        name: "FK_Funcion_Sala_SalaId",
+                        column: x => x.SalaId,
                         principalTable: "Sala",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,11 +131,11 @@ namespace ReservaCine.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    FuncionId = table.Column<Guid>(nullable: true),
+                    FuncionId = table.Column<Guid>(nullable: false),
                     FechaAlta = table.Column<DateTime>(nullable: false),
                     ClienteId = table.Column<Guid>(nullable: false),
                     CantidadButacas = table.Column<int>(nullable: false),
-                    Estado = table.Column<bool>(nullable: false)
+                    Activa = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,7 +151,7 @@ namespace ReservaCine.Migrations
                         column: x => x.FuncionId,
                         principalTable: "Funcion",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -162,9 +160,9 @@ namespace ReservaCine.Migrations
                 column: "PeliculaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Funcion_SalaId1",
+                name: "IX_Funcion_SalaId",
                 table: "Funcion",
-                column: "SalaId1");
+                column: "SalaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Genero_PeliculaId",

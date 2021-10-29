@@ -39,6 +39,7 @@ namespace ReservaCine.Models
 
         [Required(ErrorMessage = "Por favor ingresar sala")]
         [Display(Name = "Sala")]
+        [ForeignKey(nameof(Sala))]
         public Guid SalaId { get; set; }
         public Sala Sala { get; set; }
 

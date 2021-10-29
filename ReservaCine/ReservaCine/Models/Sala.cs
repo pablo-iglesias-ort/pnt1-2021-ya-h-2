@@ -27,7 +27,7 @@ namespace ReservaCine.Models
         public int CapacidadButacas { get; set; }
 
         
-        public List<Funcion> Funciones { get; set; }
+        public IEnumerable<Funcion> Funciones { get; set; }
 
     }
 }
