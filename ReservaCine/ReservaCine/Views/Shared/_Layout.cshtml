@@ -65,6 +65,7 @@
                             <li class="nav-item float-right">
                                 <a class="nav-link text-success font-italic" asp-area="">@User.FindFirstValue(ClaimTypes.GivenName)</a>
                             </li>
+
                             <li class="nav-item float-right">
                                 <form asp-controller="Usuario" asp-action="Salir" method="post">
                                     <button type="submit" class="nav-link text-danger">Salir</button>
