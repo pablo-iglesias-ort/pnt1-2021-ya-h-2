@@ -3,11 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ReservaCine.Migrations
 {
-<<<<<<< HEAD:ReservaCine/ReservaCine/Migrations/20211029233036_Versión-7.cs
     public partial class Versión7 : Migration
-=======
-    public partial class Versión6 : Migration
->>>>>>> cc9eaacbe7a1f432eafe7a2506fc146fb74e4ce6:ReservaCine/ReservaCine/Migrations/20211029231301_Versión-6.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

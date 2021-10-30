@@ -9,13 +9,8 @@ using ReservaCine.Data;
 namespace ReservaCine.Migrations
 {
     [DbContext(typeof(ReservaCineContext))]
-<<<<<<< HEAD:ReservaCine/ReservaCine/Migrations/20211029233036_Versión-7.Designer.cs
     [Migration("20211029233036_Versión-7")]
     partial class Versión7
-=======
-    [Migration("20211029231301_Versión-6")]
-    partial class Versión6
->>>>>>> cc9eaacbe7a1f432eafe7a2506fc146fb74e4ce6:ReservaCine/ReservaCine/Migrations/20211029231301_Versión-6.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

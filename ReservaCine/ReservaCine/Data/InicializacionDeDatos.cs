@@ -73,7 +73,7 @@ namespace ReservaCine.Data
 			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
 			nuevaPelicula.Duracion = 180;
 			context.Pelicula.Add(nuevaPelicula);
-			context.SaveChanges();
+			_=context.SaveChanges();
 
 			var pelicula = context.Pelicula.First();
 
@@ -172,26 +172,11 @@ namespace ReservaCine.Data
 			var TipoSala = context.TipoSala.First();
 		}
 
-			var newFuncion = new Funcion();
-			newFuncion.Id = Guid.NewGuid();
-			newFuncion.Fecha = new DateTime(2021,11,08);
-			newFuncion.Hora = new DateTime(11,20,00);
-			newFuncion.Descripcion = "Funciones diurnas";
-			newFuncion.CantButacasDisponibles = 10;
-			newFuncion.Confirmar = true;
-			//ewFuncion.PeliculaId = new Pelicula(id);
-			newFuncion.Sala = new Sala();
-			//wFuncion.Reservas= new Reserva();
-			context.Funcion.Add(newFuncion);
-			context.SaveChanges();
-
-			var Funcion = context.Funcion.First();
-			
 
 
 		}
 
 	}
-}
+
 		
 
