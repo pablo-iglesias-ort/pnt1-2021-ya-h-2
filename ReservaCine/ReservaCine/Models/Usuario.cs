@@ -12,7 +12,7 @@ namespace ReservaCine.Models
         [Key]
         public Guid Id { get; set; }
 
-        [Required (ErrorMessage = "Ingrese un nombre válido")]
+        [Required(ErrorMessage = "Ingrese un nombre válido")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener un mínimo de 3 letras.")]
         public String Nombre { get; set; }
 
@@ -21,12 +21,12 @@ namespace ReservaCine.Models
         public String Apellido { get; set; }
 
         [Required(ErrorMessage = "Ingrese un DNI válido")]
-        [Range(10000000, 99999999999, ErrorMessage ="Ingrese DNI válido")]
+        [Range(10000000, 99999999999, ErrorMessage = "Ingrese DNI válido")]
         public long DNI { get; set; }
 
         [Required(ErrorMessage = "Ingrese un Email válido")]
         [EmailAddress(ErrorMessage = "Formato de Email inválido")]
-        [StringLength(50, MinimumLength = 3,ErrorMessage = "El email es inválido")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El email es inválido")]
         public String Email { get; set; }
 
         [Required(ErrorMessage = "Ingrese un domicilio válido")]
@@ -34,8 +34,9 @@ namespace ReservaCine.Models
         public String Domicilio { get; set; }
 
         [Required(ErrorMessage = "Ingrese un número de Teléfono")]
-        [Range(1000000000, 99999999999 , ErrorMessage = "Teléfono incorrecto")]
+        [Range(1000000000, 99999999999, ErrorMessage = "Teléfono incorrecto")]
         [DisplayName("Teléfono")]
+        [Phone]
         public long Telefono { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

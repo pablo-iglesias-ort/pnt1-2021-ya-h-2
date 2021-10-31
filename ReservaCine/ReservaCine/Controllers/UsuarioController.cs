@@ -51,7 +51,7 @@ namespace ReservaCine.Controllers
                     var contraseña = Encoding.ASCII.GetBytes(Password);
                     if (contraseña.SequenceEqual(user.Password))
                     {
-                        // Creamos los Claims (credencial de acceso con informacion del usuario)
+                        // Creamos los Claims (credencial de acceso con informacion del usuario)-- cookies
                         ClaimsIdentity identidad = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
                         // Agregamos a la credencial el nombre de usuario
@@ -60,6 +60,8 @@ namespace ReservaCine.Controllers
                         identidad.AddClaim(new Claim(ClaimTypes.GivenName, user.Nombre));
                         // Agregamos a la credencial el Rol
                         identidad.AddClaim(new Claim(ClaimTypes.Role, user.Rol.ToString()));
+                        // Agregamos el Id de Usuario
+                        identidad.AddClaim(new Claim("IdDeUsuario", user.Id.ToString()));
 
                         ClaimsPrincipal principal = new ClaimsPrincipal(identidad);
 
@@ -131,6 +133,7 @@ namespace ReservaCine.Controllers
 
                 usuario.Id = Guid.NewGuid();
                 usuario.Password = Encoding.ASCII.GetBytes(pass);
+                usuario.FechaAlta = DateTime.Today;
                 if (legajo == null)
                 {
                     
@@ -141,6 +144,8 @@ namespace ReservaCine.Controllers
             }
             return View(usuario);
         }
+
+        
     }
 }
 

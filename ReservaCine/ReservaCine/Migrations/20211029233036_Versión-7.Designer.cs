@@ -9,8 +9,8 @@ using ReservaCine.Data;
 namespace ReservaCine.Migrations
 {
     [DbContext(typeof(ReservaCineContext))]
-    [Migration("20211029231301_Versión-6")]
-    partial class Versión6
+    [Migration("20211029233036_Versión-7")]
+    partial class Versión7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,13 +65,7 @@ namespace ReservaCine.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PeliculaId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PeliculaId")
-                        .IsUnique();
 
                     b.ToTable("Genero");
                 });
@@ -93,12 +87,17 @@ namespace ReservaCine.Migrations
                     b.Property<DateTime>("FechaLanzamiento")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("GeneroId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GeneroId");
 
                     b.ToTable("Pelicula");
                 });
@@ -263,11 +262,11 @@ namespace ReservaCine.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ReservaCine.Models.Genero", b =>
+            modelBuilder.Entity("ReservaCine.Models.Pelicula", b =>
                 {
-                    b.HasOne("ReservaCine.Models.Pelicula", "Pelicula")
-                        .WithOne("Genero")
-                        .HasForeignKey("ReservaCine.Models.Genero", "PeliculaId")
+                    b.HasOne("ReservaCine.Models.Genero", "Genero")
+                        .WithMany("Peliculas")
+                        .HasForeignKey("GeneroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

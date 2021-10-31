@@ -20,9 +20,18 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Reserva
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()//reservas historicas
         {
-            return View(await _context.Reserva.ToListAsync());
+            var IdDeCliente = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+
+            return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
+        }
+
+        public async Task<IActionResult> ReservasHistoricas()
+        {
+            var IdDeCliente = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+
+            return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && !r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
 
         // GET: Reserva/Details/5

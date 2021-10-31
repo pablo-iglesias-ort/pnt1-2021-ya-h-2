@@ -150,5 +150,17 @@ namespace ReservaCine.Controllers
         {
             return _context.Sala.Any(e => e.Id == id);
         }
+
+        private async void completarSalas()
+        {
+            ViewBag.SalaId = await _context.Sala.ToListAsync();
+        }
+
+        //para buscar sala y llamar al metodo en el details,delete
+        private async void buscarSala(Guid id)
+        {
+            ViewBag.Sala.Numero = await _context.Sala
+                .FirstOrDefaultAsync(s => s.Id == id);
+        }
     }
 }

@@ -13,7 +13,6 @@ using ReservaCine.Models;
 namespace ReservaCine.Controllers
 {
     [Authorize]
-
     public class EmpleadoController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -65,6 +64,7 @@ namespace ReservaCine.Controllers
         {
             if (ModelState.IsValid)
             {
+                empleado.FechaAlta = DateTime.Today;
                 empleado.Id = Guid.NewGuid();
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();

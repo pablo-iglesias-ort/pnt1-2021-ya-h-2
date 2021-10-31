@@ -15,22 +15,23 @@ namespace ReservaCine.Data
         }
 
         public DbSet<ReservaCine.Models.Pelicula> Pelicula { get; set; }
+        public DbSet<ReservaCine.Models.Genero> Genero { get; set; }
+
+        public DbSet<ReservaCine.Models.Funcion> Funcion { get; set; }
 
         public DbSet<ReservaCine.Models.Usuario> Usuario { get; set; }
 
         public DbSet<ReservaCine.Models.Cliente> Cliente { get; set; }
 
-        public DbSet<ReservaCine.Models.Reserva> Reserva { get; set; }
         public DbSet<ReservaCine.Models.Empleado> Empleado { get; set; }
+        public DbSet<ReservaCine.Models.Reserva> Reserva { get; set; }
 
         public DbSet<ReservaCine.Models.Sala> Sala { get; set; }
 
         public DbSet<ReservaCine.Models.TipoSala> TipoSala { get; set; }
 
-        public DbSet<ReservaCine.Models.Genero> Genero { get; set; }
-
-        public DbSet<ReservaCine.Models.Funcion> Funcion { get; set; }
-
         
+
+         
     }
 }

@@ -32,6 +32,7 @@ namespace ReservaCine.Data
 			newCliente.Password = Encoding.ASCII.GetBytes("4564");
 
 
+
 			newCliente.FechaAlta = DateTime.Now;
 			context.Cliente.Add(newCliente);
 			context.SaveChanges();
@@ -72,11 +73,27 @@ namespace ReservaCine.Data
 			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
 			nuevaPelicula.Duracion = 180;
 			context.Pelicula.Add(nuevaPelicula);
-			context.SaveChanges();
+			_=context.SaveChanges();
 
 			var pelicula = context.Pelicula.First();
 
-			if (context.Sala.Any())
+			if (context.Genero.Any())
+			{
+				return;
+			}
+
+			var nuevoGenero = new Genero();
+			nuevoGenero.Nombre = "Acción";
+			nuevoGenero.Id = Guid.NewGuid();
+			nuevoGenero.Peliculas = new List<Pelicula>();
+			context.Genero.Add(nuevoGenero);
+			context.SaveChanges();
+
+			var genero = context.Genero.First();
+
+
+
+			if (context.Empleado.Any())
 			{
 				return;
 			}
@@ -157,8 +174,9 @@ namespace ReservaCine.Data
 
 
 
+		}
 
 	}
-}
+
 		
 

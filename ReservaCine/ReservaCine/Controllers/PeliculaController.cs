@@ -54,7 +54,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion")] Pelicula pelicula)
+        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,Genero,Duracion")] Pelicula pelicula)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion,Duracion")] Pelicula pelicula)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion,Genero, Duracion")] Pelicula pelicula)
         {
             if (id != pelicula.Id)
             {
@@ -148,10 +148,10 @@ namespace ReservaCine.Controllers
 
         private bool PeliculaExists(Guid id)
         {
-            return _context.Pelicula.Any(e => e.Id == id);
+            return _context.Pelicula.Any(p => p.Id == id);
         }
 
-        /*public IActionResult Funciones(Guid id)
+        public IActionResult Funciones(Guid id)
         {
             if (!PeliculaExists(id))
             {
@@ -160,13 +160,14 @@ namespace ReservaCine.Controllers
 
             var peliculaFuncion = _context.Pelicula
                                             .Include(pelicula => pelicula.Funciones)
-                                                .ThenInclude(peliculaFuncion => Pelicula)
-                                            .FirstOrDefault(e => e.Id == id);
+                                            .FirstOrDefault(p => p.Id == id);
 
-            var Funciones = estudianteConMaterias.Materias.Select(matEst => matEst.Materia);
+            var Funciones = peliculaFuncion.Funciones.Select(pelFun => pelFun.Pelicula);
 
             ViewData["PeliculaId"] = id;
-            return View(Funciones);*/
+            return View(Funciones);
         }
     }
+}
+
 

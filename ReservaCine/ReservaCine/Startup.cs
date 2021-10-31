@@ -31,6 +31,8 @@ namespace ReservaCine
                     opciones.LoginPath = "/Usuario/Ingresar";
                     opciones.AccessDeniedPath = "/Usuario/AccesoDenegado";
                     opciones.LogoutPath = "/Usuario/Salir";
+                    opciones.ReturnUrlParameter = "/Empleado/Details";
+                    //opciones.ReturnUrlParameter = "/Home/Index"; FALTA AGREGAR ENRUTAMIENTO A BOTON SALIR 
                 }
             );
 
@@ -57,8 +59,8 @@ namespace ReservaCine
 
             app.UseRouting();
 
-            app.UseAuthentication();
-
+            app.UseAuthentication(); //si esta linea no se pone, nunca valida que esta logeado
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
