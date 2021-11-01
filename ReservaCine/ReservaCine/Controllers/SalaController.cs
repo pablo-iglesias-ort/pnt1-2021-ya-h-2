@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -43,12 +44,14 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
+        
         // GET: Sala/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

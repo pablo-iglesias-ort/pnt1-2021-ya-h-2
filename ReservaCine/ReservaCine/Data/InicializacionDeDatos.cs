@@ -161,8 +161,8 @@ namespace ReservaCine.Data
             var newTipoSala = new TipoSala
             {
                 Id = Guid.NewGuid(),
-                Nombre = "Sala Dorada",
-                Precio = 2000,
+                Nombre = "3D",
+                Precio = 1000,
                 SalaId = newSala.Id
 				
 		};

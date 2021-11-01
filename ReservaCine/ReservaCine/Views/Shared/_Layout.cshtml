@@ -29,6 +29,17 @@
 
                         @if (User.Identity.IsAuthenticated)
                         {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
+                            </li>
+                        }
+                        @*<li class="nav-item">
+            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
+        </li>*@
+
+                        @if (User.IsInRole(nameof(Rol.Administrador)))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
                             </li>
@@ -45,9 +56,6 @@
                                 <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
                             </li>
                         }
-                        @*<li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
-                        </li>*@
 
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
@@ -62,7 +70,7 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item float-right">
-                                <a class="nav-link text-success font-italic" asp-area="" asp-action="Empleado/Details">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area="" >@User.FindFirstValue(ClaimTypes.GivenName)</a>
 
                             </li>
 
