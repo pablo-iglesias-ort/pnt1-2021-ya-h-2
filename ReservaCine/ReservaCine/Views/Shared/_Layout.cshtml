@@ -33,19 +33,13 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="TipoSala" asp-action="Index">Tipo de Salas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservar</a>
                             </li>
                         }
                         @*<li class="nav-item">
@@ -65,7 +59,7 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item float-right">
-                                <a class="nav-link text-success font-italic" asp-area="">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Cliente">@User.FindFirstValue(ClaimTypes.GivenName)</a>
                             </li>
                             <li class="nav-item float-right">
                                 <form asp-controller="Usuario" asp-action="Salir" method="post">

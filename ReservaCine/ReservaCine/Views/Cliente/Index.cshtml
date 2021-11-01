@@ -9,8 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table text-dark table-striped table-light">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
@@ -31,52 +31,67 @@
                 @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaAlta)
+                @Html.DisplayNameFor(model => model.NombreUsuario)
             </th>
-            
+            @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaAlta)
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DNI)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Domicilio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaAlta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreUsuario)
-            </td>
-            <td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DNI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Domicilio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
                 {
-
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <label>|</label>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <label>|</label>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaAlta)
+                    </td>
                 }
-            </td>
-            
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreUsuario)
+                </td>
+                <td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
+                    {
+
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <label>|</label>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <label>|</label>
+                        <a asp-action="Reservas" asp-route-id="@Model.Id">Ver Reservas</a>
+
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+                    {
+                        <label>|</label>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+
+            </tr>
+        }
     </tbody>
 </table>
