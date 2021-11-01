@@ -4,13 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Funciones</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+    {
+        <a asp-action="Create">Crear nueva Función</a>
+    }
 </p>
-<table class="table">
-    <thead>
+<table class="table text-dark table-striped table-light">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Fecha)
@@ -25,10 +28,18 @@
                 @Html.DisplayNameFor(model => model.CantButacasDisponibles)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Confirmar)
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
+                {
+                    @Html.DisplayNameFor(model => model.Confirmar)
+                }
+
             </th>
-            
-            
+            <th>
+                @Html.DisplayNameFor(model => model.Sala)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pelicula)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,19 +59,29 @@
                 @Html.DisplayFor(modelItem => item.CantButacasDisponibles)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Confirmar)
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
+                {
+                    @Html.DisplayFor(modelItem => item.Confirmar)
+                }
+
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PeliculaId)
+                @Html.DisplayFor(modelItem => item.Sala.Numero)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SalaId)
+                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
             </td>
-         
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                    <label>|</label>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Elimnar</a>
+                    <laberl>|</laberl>
+                }
+                
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a>
+
             </td>
         </tr>
 }

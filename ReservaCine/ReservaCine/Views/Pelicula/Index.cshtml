@@ -7,7 +7,10 @@
 <h1>Cartelera</h1>
 
 <p>
-    <a asp-action="Create">Crear nueva Película</a>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+    {
+        <a asp-action="Create">Crear nueva Película</a>
+    }
 </p>
 <table class="table text-dark table-striped table-light">  @*Modificación de visual de la tabla*@
     <thead class="thead-dark">
@@ -46,7 +49,7 @@
                     @Html.DisplayFor(modelItem => item.Descripcion)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Genero)
+                    @Html.DisplayFor(modelItem => item.Genero.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Duracion)
@@ -59,13 +62,14 @@
                         <label>|</label>
                         <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
                     }
-    
+                    <br>
                     <a asp-action="Details" asp-route-id="@item.Id">Detalles</a>
                     <label>|</label>
                     <a asp-action="Funciones" asp-route-id="@item.Id">Funciones</a>
                 </td>
-            
-        </tr>
-}
-    </tbody>
+
+            </tr>
+
+        }
+        </tbody>
 </table>

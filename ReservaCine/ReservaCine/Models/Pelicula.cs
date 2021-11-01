@@ -38,6 +38,7 @@ namespace ReservaCine.Models
 
         }
 
+        [Required(ErrorMessage = "Seleccione un Genero")]
         [ForeignKey(nameof(Genero))]
         public Guid GeneroId { get; set; }
         public Genero Genero { get; set; }

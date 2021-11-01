@@ -20,11 +20,11 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Reserva
-        public async Task<IActionResult> Index()//reservas historicas
+       public async Task<IActionResult> Index()//reservas historicas
         {
             var IdDeCliente = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
 
-            return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
+           return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
 
         public async Task<IActionResult> ReservasHistoricas()
@@ -33,7 +33,7 @@ namespace ReservaCine.Controllers
 
             return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && !r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
-
+       
         // GET: Reserva/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

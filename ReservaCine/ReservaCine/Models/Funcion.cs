@@ -30,11 +30,11 @@ namespace ReservaCine.Models
         [Display(Name = "Descripción")]
         public string Descripcion { get; set; }
 
-
+        [Required(ErrorMessage = "Por favor ingrese Cantidad de Butacas Disponibles")]
         [Display(Name = "Butacas Disponibles")]
         public int CantButacasDisponibles { get; set; }
 
-        [Display(Name = "Confirmar")]
+        [Display(Name = "Confirmada")]
         public Boolean Confirmar { get; set; }
 
         [Required(ErrorMessage = "Por favor ingresar sala")]
@@ -46,9 +46,12 @@ namespace ReservaCine.Models
 
         [Display(Name = "Reservas")]
         public IEnumerable<Reserva> Reservas { get; set; }
-      
+
+        
+        [Required(ErrorMessage = "Por favor seleccione una Película")]
         [ForeignKey(nameof(Pelicula))]
         public Guid PeliculaId { get; set; }
+        [Display(Name = "Película")]
         public Pelicula Pelicula { get; set; }
 
     }
