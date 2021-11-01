@@ -133,6 +133,7 @@ namespace ReservaCine.Controllers
 
                 usuario.Id = Guid.NewGuid();
                 usuario.Password = Encoding.ASCII.GetBytes(pass);
+                usuario.FechaAlta = DateTime.Today;
                 if (legajo == null)
                 {
                     

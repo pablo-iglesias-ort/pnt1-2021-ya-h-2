@@ -81,7 +81,7 @@
                         <label>|</label>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                         <label>|</label>
-                        <a asp-action="Reservas" asp-route-id="@Model.Id">Ver Reservas</a>
+                        <a asp-action="Reservas" asp-route-id="@item.Id">Ver Reservas</a>
 
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))

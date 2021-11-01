@@ -23,10 +23,10 @@ namespace ReservaCine.Controllers
         // GET: Funcion
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Funcion.ToListAsync());
+            var reservaCineContext = _context.Funcion.Include(f => f.Pelicula).Include(f => f.Sala);
+            return View(await reservaCineContext.ToListAsync());
         }
 
-        [AllowAnonymous]
         // GET: Funcion/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -36,6 +36,8 @@ namespace ReservaCine.Controllers
             }
 
             var funcion = await _context.Funcion
+                .Include(f => f.Pelicula)
+                .Include(f => f.Sala)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (funcion == null)
             {
@@ -44,21 +46,23 @@ namespace ReservaCine.Controllers
 
             return View(funcion);
         }
-        
-        
+
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Funcion/Create
         public IActionResult Create()
         {
+            completarPeliculas();
+            completarSalas();
             return View();
         }
 
-        [Authorize(Roles = nameof(Rol.Administrador))] 
         // POST: Funcion/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,PeliculaId,SalaId,Horario")] Funcion funcion)
+        [Authorize(Roles = nameof(Rol.Administrador))]
+        public async Task<IActionResult> Create([Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,SalaId,PeliculaId")] Funcion funcion)
         {
             if (ModelState.IsValid)
             {
@@ -67,9 +71,12 @@ namespace ReservaCine.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PeliculaId"] = new SelectList(_context.Pelicula, "Id", "Titulo", funcion.PeliculaId);
+            ViewData["SalaId"] = new SelectList(_context.Sala, "Id", "Numero", funcion.SalaId);
             return View(funcion);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Funcion/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -83,6 +90,10 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
+            buscarSala(funcion.SalaId);
+            buscarPelicula(funcion.PeliculaId);
+            completarPeliculas();
+            completarSalas();
             return View(funcion);
         }
 
@@ -92,7 +103,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,PeliculaId,SalaId,Horario")] Funcion funcion)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,SalaId,PeliculaId")] Funcion funcion)
         {
             if (id != funcion.Id)
             {
@@ -119,9 +130,12 @@ namespace ReservaCine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PeliculaId"] = new SelectList(_context.Pelicula, "Id", "Titulo", funcion.PeliculaId);
+            ViewData["SalaId"] = new SelectList(_context.Sala, "Id", "Numero", funcion.SalaId);
             return View(funcion);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Funcion/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -131,6 +145,8 @@ namespace ReservaCine.Controllers
             }
 
             var funcion = await _context.Funcion
+                .Include(f => f.Pelicula)
+                .Include(f => f.Sala)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (funcion == null)
             {
@@ -155,6 +171,31 @@ namespace ReservaCine.Controllers
         private bool FuncionExists(Guid id)
         {
             return _context.Funcion.Any(e => e.Id == id);
+        }
+
+        private async void completarPeliculas()
+        {
+            ViewBag.PeliculaId = await _context.Pelicula.ToListAsync();
+        }
+
+        //para buscar pelicula y llamar al metodo en el details,delete
+        private async void buscarPelicula(Guid id)
+        {
+            ViewBag.PeliculaTitulo = await _context.Pelicula
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        //completar lista de salas a seleccionar
+        private async void completarSalas()
+        {
+            ViewBag.SalaId = await _context.Sala.ToListAsync();
+        }
+
+        //para buscar  y llamar al metodo en el details,delete
+        private async void buscarSala(Guid id)
+        {
+            ViewBag.SalaNumero = await _context.Sala
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
     }
 }

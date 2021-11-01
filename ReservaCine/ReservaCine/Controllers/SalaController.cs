@@ -39,13 +39,14 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(sala);
         }
 
         // GET: Sala/Create
         public IActionResult Create()
         {
+            completarSalas();
             return View();
         }
 
@@ -149,6 +150,18 @@ namespace ReservaCine.Controllers
         private bool SalaExists(Guid id)
         {
             return _context.Sala.Any(e => e.Id == id);
+        }
+
+        private async void completarSalas()
+        {
+            ViewBag.SalaId = await _context.Sala.ToListAsync();
+        }
+
+        //para buscar  y llamar al metodo en el details,delete
+        private async void buscarSala(Guid id)
+        {
+            ViewBag.SalaNumero = await _context.Sala
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
     }
 }

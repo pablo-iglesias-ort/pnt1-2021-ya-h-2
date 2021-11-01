@@ -9,7 +9,7 @@ using ReservaCine.Data;
 namespace ReservaCine.Migrations
 {
     [DbContext(typeof(ReservaCineContext))]
-    [Migration("20211029233036_Versión-7")]
+    [Migration("20211031035730_Versión-7")]
     partial class Versión7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
