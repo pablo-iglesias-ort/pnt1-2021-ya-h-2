@@ -4,12 +4,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
-    <h4>Funcion</h4>
+    <h4>Función</h4>
     <hr />
-    <dl class="row">
+    <dl class="row text-light">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Fecha)
         </dt>
@@ -34,28 +34,40 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CantButacasDisponibles)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Confirmar)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Confirmar)
+
+        <dt class="col-sm-2">
+            @if (User.Identity.IsAuthenticated)
+            {
+                @Html.DisplayNameFor(model => model.Confirmar)
+
+            }
+        </dt> 
+        <dd class="col-sm-10">
+            @if (User.Identity.IsAuthenticated)
+            {
+                @Html.DisplayFor(model => model.Confirmar)
+            }
+
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PeliculaId)
+            @Html.DisplayNameFor(model => model.Sala)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PeliculaId)
+            @Html.DisplayFor(model => model.Sala.Numero)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SalaId)
+            @Html.DisplayNameFor(model => model.Pelicula)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SalaId)
+            @Html.DisplayFor(model => model.Pelicula.Titulo)
         </dd>
-      
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+       <label>|</label>
+    }
+    <a asp-action="Index">Volver a la Lista</a>
 </div>

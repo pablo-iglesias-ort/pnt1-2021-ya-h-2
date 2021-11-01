@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,23 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Pelicula
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pelicula.ToListAsync());
+            var peliculas = await _context.Pelicula.ToListAsync();
+
+            foreach(var p in peliculas){
+               var genero = await _context.Genero
+                .FirstOrDefaultAsync(g => g.Id == p.GeneroId);
+
+                p.Genero.Nombre = genero.Nombre;
+                p.Genero.Id = p.GeneroId;
+            }
+
+            return View(peliculas);
         }
 
+        [AllowAnonymous]
         // GET: Pelicula/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -32,20 +45,23 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-
-            var pelicula = await _context.Pelicula
+            
+            Pelicula pelicula = await _context.Pelicula
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pelicula == null)
             {
                 return NotFound();
             }
 
+            buscarGenero(pelicula.GeneroId);
             return View(pelicula);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Pelicula/Create
         public IActionResult Create()
         {
+            completarGeneros();
             return View();
         }
 
@@ -54,7 +70,8 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,Genero,Duracion")] Pelicula pelicula)
+        [Authorize(Roles = nameof(Rol.Administrador))]
+        public async Task<IActionResult> Create([Bind("Id,FechaLanzamiento,Titulo,Descripcion,GeneroId,Duracion")] Pelicula pelicula)
         {
             if (ModelState.IsValid)
             {
@@ -63,9 +80,12 @@ namespace ReservaCine.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+
             return View(pelicula);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Pelicula/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -79,15 +99,17 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
+            completarGeneros();
             return View(pelicula);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Pelicula/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion,Genero, Duracion")] Pelicula pelicula)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FechaLanzamiento,Titulo,Descripcion, GeneroId, Duracion")] Pelicula pelicula)
         {
             if (id != pelicula.Id)
             {
@@ -117,6 +139,7 @@ namespace ReservaCine.Controllers
             return View(pelicula);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Pelicula/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -132,9 +155,12 @@ namespace ReservaCine.Controllers
                 return NotFound();
             }
 
+            buscarGenero(pelicula.GeneroId);
+
             return View(pelicula);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Pelicula/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -143,6 +169,7 @@ namespace ReservaCine.Controllers
             var pelicula = await _context.Pelicula.FindAsync(id);
             _context.Pelicula.Remove(pelicula);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -162,11 +189,25 @@ namespace ReservaCine.Controllers
                                             .Include(pelicula => pelicula.Funciones)
                                             .FirstOrDefault(p => p.Id == id);
 
-            var Funciones = peliculaFuncion.Funciones.Select(pelFun => pelFun.Pelicula);
+            var funciones = peliculaFuncion.Funciones.Select(funPel => funPel);
 
-            ViewData["PeliculaId"] = id;
-            return View(Funciones);
+            return View(funciones);
         }
+
+        //completar lista de generos a seleccionar
+        private async void completarGeneros()
+        {
+            ViewBag.GeneroId = await _context.Genero.ToListAsync();
+        }
+
+        //para buscar genero y llamar al metodo en el details,delete
+        private async void buscarGenero(Guid id)
+        {
+            ViewBag.GeneroNombre = await _context.Genero
+                .FirstOrDefaultAsync(g => g.Id == id);
+        }
+
+
     }
 }
 

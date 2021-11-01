@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <title>@ViewData["Title"] Reserva de Cine </title>
 
 
@@ -48,9 +51,9 @@
                                 <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
                             </li>
                         }
-                        @*<li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
-                        </li>*@
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
@@ -102,9 +105,7 @@
             &copy; 2021 - Reserva de Cine - Todos los derechos están protegidos por Copyright © <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
