@@ -27,9 +27,6 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Pelicula" asp-action="Index">Películas</a>
                         </li>
 
@@ -68,8 +65,12 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item float-right">
-                                <a class="nav-link text-success font-italic" asp-area="">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area="" asp-action="Empleado/Details">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+
                             </li>
+
+
+
                             <li class="nav-item float-right">
                                 <form asp-controller="Usuario" asp-action="Salir" method="post">
                                     <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@

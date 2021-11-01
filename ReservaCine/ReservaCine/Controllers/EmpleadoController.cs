@@ -64,6 +64,7 @@ namespace ReservaCine.Controllers
         {
             if (ModelState.IsValid)
             {
+                empleado.FechaAlta = DateTime.Today;
                 empleado.Id = Guid.NewGuid();
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();

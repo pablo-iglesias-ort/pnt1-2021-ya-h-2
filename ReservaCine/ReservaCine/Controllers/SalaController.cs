@@ -152,7 +152,6 @@ namespace ReservaCine.Controllers
             return _context.Sala.Any(e => e.Id == id);
         }
 
-        //completar lista de salas a seleccionar
         private async void completarSalas()
         {
             ViewBag.SalaId = await _context.Sala.ToListAsync();
