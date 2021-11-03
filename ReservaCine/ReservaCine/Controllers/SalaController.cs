@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,18 @@ namespace ReservaCine.Controllers
         // GET: Sala
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sala.ToListAsync());
+            var salas = await _context.Sala.ToListAsync();
+
+            foreach (var s in salas)
+            {
+                var tipoSala = await _context.TipoSala
+                 .FirstOrDefaultAsync(t => t.Id == s.TipoSalaId);
+
+                s.TipoSala.Nombre = tipoSala.Nombre;
+                s.TipoSala.Id = s.TipoSalaId;
+            }
+
+            return View(salas);
         }
 
         // GET: Sala/Details/5
@@ -43,19 +55,22 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
+        
         // GET: Sala/Create
         public IActionResult Create()
         {
-            completarSalas();
+            completarTipoSalas();
             return View();
         }
 
+       
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas")] Sala sala)
+        [Authorize(Roles = nameof(Rol.Administrador))]
+        public async Task<IActionResult> Create( Sala sala)
         {
             if (ModelState.IsValid)
             {
@@ -162,6 +177,11 @@ namespace ReservaCine.Controllers
         {
             ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        private async void completarTipoSalas()
+        {
+            ViewBag.TipoSalaId = await _context.TipoSala.ToListAsync();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace ReservaCine.Controllers
     public class EmpleadoController : Controller
     {
         private readonly ReservaCineContext _context;
+        private readonly ISeguridad seguridad= new SeguridadBasica();
 
         public EmpleadoController(ReservaCineContext context)
         {
@@ -60,12 +61,15 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Legajo,Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Empleado empleado)
+        public async Task<IActionResult> Create(Empleado empleado)
         {
+
             if (ModelState.IsValid)
             {
                 empleado.FechaAlta = DateTime.Today;
-                empleado.Id = Guid.NewGuid();
+                empleado.Id = Guid.NewGuid();                
+                empleado.Password = seguridad.EncriptarPass(empleado.DNI.ToString());
+                empleado.NombreUsuario = empleado.Nombre + empleado.DNI.ToString();
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -156,6 +160,12 @@ namespace ReservaCine.Controllers
         private bool EmpleadoExists(Guid id)
         {
             return _context.Empleado.Any(e => e.Id == id);
+        }
+
+        private async void buscarEmpleado(Guid id)
+        {
+            ViewBag.EmpleadoID = await _context.Empleado
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
     }
 }

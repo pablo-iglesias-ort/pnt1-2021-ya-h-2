@@ -1,4 +1,5 @@
-﻿using ReservaCine.Models;
+﻿using ReservaCine.Controllers;
+using ReservaCine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace ReservaCine.Data
 {
 	public class InicializacionDeDatos
 	{
+		private static readonly ISeguridad seguridad = new SeguridadBasica();
 		public static void Inicializar(ReservaCineContext context)
-		{
+		{		
 			context.Database.EnsureCreated();
 
 			if (context.Cliente.Any())
@@ -29,7 +31,7 @@ namespace ReservaCine.Data
 			newCliente.Domicilio = "as 1245";
 			newCliente.Telefono = 3234235245;
 			newCliente.NombreUsuario = "assa";
-			newCliente.Password = Encoding.ASCII.GetBytes("4564");
+			newCliente.Password = seguridad.EncriptarPass("4564");
 
 
 
@@ -54,7 +56,7 @@ namespace ReservaCine.Data
 			newEmpleado.Telefono = 1130659588;
 			newEmpleado.Legajo = 11564665;
 			newEmpleado.NombreUsuario = "Patokpo123";
-			newEmpleado.Password = Encoding.ASCII.GetBytes("pato1998");
+			newEmpleado.Password = seguridad.EncriptarPass("pato1998");
 			newEmpleado.FechaAlta = DateTime.Now;
 			context.Empleado.Add(newEmpleado);
 			context.SaveChanges();
@@ -94,7 +96,23 @@ namespace ReservaCine.Data
 
 			var pelicula = context.Pelicula.First();
 
-			
+			if (context.TipoSala.Any())
+			{
+				return;
+			}
+
+			var newTipoSala = new TipoSala
+			{
+				Id = Guid.NewGuid(),
+				Nombre = "Sala 3D",
+				Precio = 2000,
+
+
+			};
+			context.TipoSala.Add(newTipoSala);
+			context.SaveChanges();
+
+			var TipoSala = context.TipoSala.First();
 
 
 
@@ -107,6 +125,7 @@ namespace ReservaCine.Data
 			newSala.Id = Guid.NewGuid();
 			newSala.CapacidadButacas = 125;
 			newSala.Numero = 1;
+			newSala.TipoSalaId = newTipoSala.Id;
 
 			context.Sala.Add(newSala);
 			context.SaveChanges();
@@ -155,23 +174,7 @@ namespace ReservaCine.Data
 			var Reserva = context.Reserva.First();
 						
 
-			if (context.TipoSala.Any())
-			{
-				return;
-			}
-
-            var newTipoSala = new TipoSala
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "Sala 3D",
-                Precio = 2000,
-                SalaId = newSala.Id
-				
-			};
-			context.TipoSala.Add(newTipoSala);
-			context.SaveChanges();
-
-			var TipoSala = context.TipoSala.First();
+			
 		}
 
 

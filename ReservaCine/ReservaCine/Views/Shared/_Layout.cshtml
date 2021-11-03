@@ -6,15 +6,15 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
     <title>@ViewData["Title"] Reserva de Cine </title>
 
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">@*cambio color de la barra cabecera*@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
+            @*cambio color de la barra cabecera*@
             <div class="container">
                 <a class="navbar-brand font-weight-bold text-danger" asp-area="" asp-controller="Home" asp-action="Index">Reserva de Cine</a> @*agrego color y estilo*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -32,6 +32,14 @@
 
                         @if (User.Identity.IsAuthenticated)
                         {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole(nameof(Rol.Administrador)))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Sala" asp-action="Index">Salas</a>
                             </li>
@@ -41,14 +49,27 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservar</a>
                             </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
+                            </li>
+                            <li class="nav-item float-right">
+                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Empleado"
+                                   asp-action="Details" >@User.FindFirstValue(ClaimTypes.GivenName) </a>
+                            </li>
+
+                        }
+
 
                     </ul>
                 </div>
@@ -59,7 +80,8 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item float-right">
-                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Cliente">@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Cliente"
+                                   asp-action="Details" asp-route-id=@User.FindFirstValue("IdDeUsuario")>@User.FindFirstValue(ClaimTypes.GivenName) </a>
                             </li>
 
 
@@ -84,22 +106,22 @@
                 }
 
             </div>
-        </nav>
-    </header>
+    </nav>
+</header>
 
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-            
-        </main>
+        &copy; 2021 - Reserva de Cine - Todos los derechos están protegidos por Copyright © <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - Reserva de Cine - Todos los derechos están protegidos por Copyright © <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
-    @RenderSection("Scripts", required: false)
+</footer>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@RenderSection("Scripts", required: false)
 </body>
 </html>

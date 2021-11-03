@@ -8,7 +8,7 @@
 
 <h4>Sala</h4>
 <hr />
-<div class="row">
+<div class="row text-light">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -23,6 +23,19 @@
                 <span asp-validation-for="CapacidadButacas" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="TipoSala" class="control-label"></label>
+                <br />
+                <select id="ddlTipoSala" name="TipoSalaId" class="custom-select">
+                    <option value="">-- Seleccionar el tipo de sala --</option>
+                    @foreach (TipoSala tipo in ViewBag.TipoSalaId)
+                    {
+                        <option value="@tipo.Id">@tipo.Nombre</option>
+                    }
+                </select>
+                <input asp-for="TipoSalaId" type="hidden" name="TipoSalaId" class="form-control" />
+                <span asp-validation-for="TipoSalaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -30,7 +43,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {

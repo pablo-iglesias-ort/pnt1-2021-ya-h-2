@@ -16,4 +16,7 @@ $("body").on("change", "#ddlPelicula", function () {
 $("body").on("change", "#ddlSala", function () {
     $("input[name=SalaId]").val($(this).find("option:selected").val());
 });
+$("body").on("change", "#ddlTipoSala", function () {
+    $("input[name=TipoSalaId]").val($(this).find("option:selected").val());
+});
 
