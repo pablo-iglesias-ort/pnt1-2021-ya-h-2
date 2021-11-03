@@ -23,7 +23,18 @@ namespace ReservaCine.Controllers
         // GET: Sala
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sala.ToListAsync());
+            var salas = await _context.Sala.ToListAsync();
+
+            foreach (var s in salas)
+            {
+                var tipoSala = await _context.TipoSala
+                 .FirstOrDefaultAsync(t => t.Id == s.TipoSalaId);
+
+                s.TipoSala.Nombre = tipoSala.Nombre;
+                s.TipoSala.Id = s.TipoSalaId;
+            }
+
+            return View(salas);
         }
 
         // GET: Sala/Details/5
@@ -40,7 +51,7 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(sala);
         }
 
@@ -48,16 +59,18 @@ namespace ReservaCine.Controllers
         // GET: Sala/Create
         public IActionResult Create()
         {
+            completarTipoSalas();
             return View();
         }
 
-        [Authorize(Roles = nameof(Rol.Administrador))]
+       
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas")] Sala sala)
+        [Authorize(Roles = nameof(Rol.Administrador))]
+        public async Task<IActionResult> Create( Sala sala)
         {
             if (ModelState.IsValid)
             {
@@ -159,11 +172,16 @@ namespace ReservaCine.Controllers
             ViewBag.SalaId = await _context.Sala.ToListAsync();
         }
 
-        //para buscar sala y llamar al metodo en el details,delete
+        //para buscar  y llamar al metodo en el details,delete
         private async void buscarSala(Guid id)
         {
-            ViewBag.Sala.Numero = await _context.Sala
+            ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        private async void completarTipoSalas()
+        {
+            ViewBag.TipoSalaId = await _context.TipoSala.ToListAsync();
         }
     }
 }

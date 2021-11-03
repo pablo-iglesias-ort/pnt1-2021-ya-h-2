@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ReservaCine.Migrations
 {
-    public partial class Versión7 : Migration
+    public partial class Versión3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,16 +20,16 @@ namespace ReservaCine.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sala",
+                name: "TipoSala",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Numero = table.Column<int>(nullable: false),
-                    CapacidadButacas = table.Column<int>(nullable: false)
+                    Nombre = table.Column<string>(maxLength: 20, nullable: false),
+                    Precio = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sala", x => x.Id);
+                    table.PrimaryKey("PK_TipoSala", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,21 +77,21 @@ namespace ReservaCine.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TipoSala",
+                name: "Sala",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nombre = table.Column<string>(maxLength: 20, nullable: false),
-                    Precio = table.Column<double>(nullable: false),
-                    SalaId = table.Column<Guid>(nullable: false)
+                    Numero = table.Column<int>(nullable: false),
+                    CapacidadButacas = table.Column<int>(nullable: false),
+                    TipoSalaId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TipoSala", x => x.Id);
+                    table.PrimaryKey("PK_Sala", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TipoSala_Sala_SalaId",
-                        column: x => x.SalaId,
-                        principalTable: "Sala",
+                        name: "FK_Sala_TipoSala_TipoSalaId",
+                        column: x => x.TipoSalaId,
+                        principalTable: "TipoSala",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -180,19 +180,15 @@ namespace ReservaCine.Migrations
                 column: "FuncionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TipoSala_SalaId",
-                table: "TipoSala",
-                column: "SalaId",
-                unique: true);
+                name: "IX_Sala_TipoSalaId",
+                table: "Sala",
+                column: "TipoSalaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Reserva");
-
-            migrationBuilder.DropTable(
-                name: "TipoSala");
 
             migrationBuilder.DropTable(
                 name: "Usuario");
@@ -208,6 +204,9 @@ namespace ReservaCine.Migrations
 
             migrationBuilder.DropTable(
                 name: "Genero");
+
+            migrationBuilder.DropTable(
+                name: "TipoSala");
         }
     }
 }

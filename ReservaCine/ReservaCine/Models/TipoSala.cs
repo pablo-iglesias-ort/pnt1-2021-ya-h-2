@@ -22,9 +22,6 @@ namespace ReservaCine.Models
         [Required(ErrorMessage = "Ingrese un precio valido")]
         public double Precio { get; set; }
 
-        [DisplayName("Tipo de Sala")]
-        [ForeignKey(nameof(Sala))]
-        public Guid SalaId { get; set; }
-        public Sala Sala { get; set; }
+        public IEnumerable<Sala> Salas { get; set; }
     }
 }

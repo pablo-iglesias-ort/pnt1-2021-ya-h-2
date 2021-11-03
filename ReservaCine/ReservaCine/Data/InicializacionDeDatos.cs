@@ -61,21 +61,7 @@ namespace ReservaCine.Data
 
 			var Empleado = context.Empleado.First();
 
-			if (context.Pelicula.Any())
-			{
-				return;
-			}
-
-			var nuevaPelicula = new Pelicula();
-			nuevaPelicula.FechaLanzamiento = DateTime.Now.Date;
-			nuevaPelicula.Titulo = "La viuda Negra";
-			nuevaPelicula.Id = Guid.NewGuid();
-			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
-			nuevaPelicula.Duracion = 180;
-			context.Pelicula.Add(nuevaPelicula);
-			_=context.SaveChanges();
-
-			var pelicula = context.Pelicula.First();
+			
 
 			if (context.Genero.Any())
 			{
@@ -91,21 +77,54 @@ namespace ReservaCine.Data
 
 			var genero = context.Genero.First();
 
-
-
-			if (context.Empleado.Any())
+			if (context.Pelicula.Any())
 			{
 				return;
 			}
 
-			var newSala = new Sala()
+			var nuevaPelicula = new Pelicula();
+			nuevaPelicula.FechaLanzamiento = DateTime.Now.Date;
+			nuevaPelicula.Titulo = "La viuda Negra";
+			nuevaPelicula.Id = Guid.NewGuid();
+			nuevaPelicula.Descripcion = "Una de las preferidas de las series de Marvel, viene a vengarse de su pasado";
+			nuevaPelicula.GeneroId = nuevoGenero.Id;
+			nuevaPelicula.Duracion = 180;
+			context.Pelicula.Add(nuevaPelicula);
+			context.SaveChanges();
+
+			var pelicula = context.Pelicula.First();
+
+			if (context.TipoSala.Any())
+			{
+				return;
+			}
+
+			var newTipoSala = new TipoSala
 			{
 				Id = Guid.NewGuid(),
-				CapacidadButacas = 125,
-				Numero = 912,
-				
+				Nombre = "Sala 3D",
+				Precio = 2000,
 
-		};
+
+			};
+			context.TipoSala.Add(newTipoSala);
+			context.SaveChanges();
+
+			var TipoSala = context.TipoSala.First();
+
+
+
+			if (context.Sala.Any())
+			{
+				return;
+			}
+
+			var newSala = new Sala();
+			newSala.Id = Guid.NewGuid();
+			newSala.CapacidadButacas = 125;
+			newSala.Numero = 1;
+			newSala.TipoSalaId = newTipoSala.Id;
+
 			context.Sala.Add(newSala);
 			context.SaveChanges();
 
@@ -125,7 +144,7 @@ namespace ReservaCine.Data
 			nuevaFuncion.PeliculaId = nuevaPelicula.Id;
 			nuevaFuncion.SalaId = newSala.Id;
 			nuevaFuncion.Fecha = DateTime.Now.AddDays(14);
-			// nuevaFuncion.Hora = Time
+			//uevaFuncion.Hora = Time
 			// AVERIGUAR COMO CARGAR HORARIO 
 
 			context.Funcion.Add(nuevaFuncion);
@@ -153,23 +172,7 @@ namespace ReservaCine.Data
 			var Reserva = context.Reserva.First();
 						
 
-			if (context.TipoSala.Any())
-			{
-				return;
-			}
-
-            var newTipoSala = new TipoSala
-            {
-                Id = Guid.NewGuid(),
-                Nombre = "3D",
-                Precio = 1000,
-                SalaId = newSala.Id
-				
-		};
-		context.TipoSala.Add(newTipoSala);
-			context.SaveChanges();
-
-			var TipoSala = context.TipoSala.First();
+			
 		}
 
 
