@@ -188,9 +188,10 @@ namespace ReservaCine.Controllers
 
             var peliculaFuncion = _context.Pelicula
                                             .Include(pelicula => pelicula.Funciones)
+                                                .ThenInclude(funcion => funcion.Sala)
                                             .FirstOrDefault(p => p.Id == id);
 
-            var funciones = peliculaFuncion.Funciones.Select(funPel => funPel);
+            var funciones = peliculaFuncion.Funciones.Select(funPel => funPel);            
 
             return View(funciones);
         }

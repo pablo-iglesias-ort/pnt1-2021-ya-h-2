@@ -49,7 +49,7 @@ namespace ReservaCine.Controllers
                 {
 
                     // Verificamos que coincida la contraseña
-                    var contraseña = Encoding.ASCII.GetBytes(Password);
+                    var contraseña = seguridad.EncriptarPass(Password);
                     if (contraseña.SequenceEqual(user.Password))
                     {
                         // Creamos los Claims (credencial de acceso con informacion del usuario)-- cookies
