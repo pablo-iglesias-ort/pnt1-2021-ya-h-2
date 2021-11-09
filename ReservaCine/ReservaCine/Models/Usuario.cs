@@ -43,13 +43,11 @@ namespace ReservaCine.Models
         [DisplayName("Fecha de Alta")]
         public DateTime FechaAlta { get; set; }
 
-        [Required(ErrorMessage = "Ingrese un nombre de usuario válido")]
-        [StringLength(10, MinimumLength = 4,ErrorMessage = "El usuario es inválido. Debe contener mínimo 4 caracteres.")]
+        
         [DisplayName("Nombre de Usuario")]
         public String NombreUsuario { get; set; }
 
-        [Required(ErrorMessage = "Ingrese una contraseña")]
-        [StringLength(15, MinimumLength = 8, ErrorMessage = "La contraseña debe tener un mínimo de 8 caracteres")]
+        
         [DisplayName("Contraseña")]
         [ScaffoldColumn(false)] //para ocultar en columna
         public byte[] Password { get; set; }

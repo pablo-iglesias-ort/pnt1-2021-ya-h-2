@@ -36,14 +36,14 @@
         </dd>
 
         <dt class="col-sm-2">
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
             {
                 @Html.DisplayNameFor(model => model.Confirmar)
 
             }
         </dt> 
         <dd class="col-sm-10">
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
             {
                 @Html.DisplayFor(model => model.Confirmar)
             }
