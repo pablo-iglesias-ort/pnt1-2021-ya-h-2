@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Sala</h4>
 <hr />
@@ -15,14 +15,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
-                <span asp-validation-for="Numero" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CapacidadButacas" class="control-label"></label>
-                <input asp-for="CapacidadButacas" class="form-control" />
-                <span asp-validation-for="CapacidadButacas" class="text-danger"></span>
+                <label asp-for="TipoSala" class="control-label"></label>
+                <br />
+                <select id="ddlTipoSala" name="TipoSalaId" class="custom-select">
+                    <option value="">-- Seleccionar el tipo de sala --</option>
+                    @foreach (TipoSala tipo in ViewBag.TipoSalaId)
+                    {
+                        <option value="@tipo.Id">@tipo.Nombre</option>
+                    }
+                </select>
+                <input asp-for="TipoSalaId" type="hidden" name="TipoSalaId" class="form-control" />
+                <span asp-validation-for="TipoSalaId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -32,7 +35,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {

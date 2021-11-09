@@ -38,8 +38,8 @@
                         </li>
                     }
                     @*<li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
-                        </li>*@
+            <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
+        </li>*@
 
                     @if (User.IsInRole(nameof(Rol.Administrador)))
                     {
@@ -60,12 +60,11 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
                     </li>
+                  
 
 
 
@@ -79,7 +78,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item float-right">
-                            <a class="nav-link text-success font-italic" asp-area="" asp-controller="Empleado"
+                            <a class="nav-link text-success font-italic" asp-area="" asp-controller="Cliente"
                                asp-action="Details"   asp-route-id=@User.FindFirstValue("IdDeUsuario")
                                 >@User.FindFirstValue(ClaimTypes.GivenName) </a>
                         </li>
