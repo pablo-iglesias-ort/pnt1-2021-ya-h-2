@@ -14,7 +14,7 @@ namespace ReservaCine.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.18");
+                .HasAnnotation("ProductVersion", "3.1.20");
 
             modelBuilder.Entity("ReservaCine.Models.Funcion", b =>
                 {
@@ -142,7 +142,12 @@ namespace ReservaCine.Migrations
                     b.Property<int>("Numero")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("TipoSalaId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TipoSalaId");
 
                     b.ToTable("Sala");
                 });
@@ -161,13 +166,7 @@ namespace ReservaCine.Migrations
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
 
-                    b.Property<Guid>("SalaId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SalaId")
-                        .IsUnique();
 
                     b.ToTable("TipoSala");
                 });
@@ -284,11 +283,11 @@ namespace ReservaCine.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ReservaCine.Models.TipoSala", b =>
+            modelBuilder.Entity("ReservaCine.Models.Sala", b =>
                 {
-                    b.HasOne("ReservaCine.Models.Sala", "Sala")
-                        .WithOne("tipoSala")
-                        .HasForeignKey("ReservaCine.Models.TipoSala", "SalaId")
+                    b.HasOne("ReservaCine.Models.TipoSala", "TipoSala")
+                        .WithMany("Salas")
+                        .HasForeignKey("TipoSalaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

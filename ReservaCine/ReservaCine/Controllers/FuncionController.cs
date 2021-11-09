@@ -62,7 +62,7 @@ namespace ReservaCine.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(Rol.Administrador))]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,SalaId,PeliculaId")] Funcion funcion)
+        public async Task<IActionResult> Create(Funcion funcion)
         {
             if (ModelState.IsValid)
             {
@@ -94,6 +94,14 @@ namespace ReservaCine.Controllers
             buscarPelicula(funcion.PeliculaId);
             completarPeliculas();
             completarSalas();
+
+            var salas = await _context.Sala
+                                        .Include(s => s.TipoSala)
+                                        .Select(s => new SelectListItem(string.Concat(s.Numero, " - ", s.TipoSala.Nombre, " - ",s.CapacidadButacas),s.Id.ToString()))
+                                        .ToListAsync();
+
+            ViewBag.Salas = salas;
+
             return View(funcion);
         }
 
@@ -103,7 +111,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Fecha,Hora,Descripcion,CantButacasDisponibles,Confirmar,SalaId,PeliculaId")] Funcion funcion)
+        public async Task<IActionResult> Edit(Guid id, Funcion funcion)
         {
             if (id != funcion.Id)
             {

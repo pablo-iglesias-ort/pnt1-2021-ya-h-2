@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,40 +23,38 @@ namespace ReservaCine.Controllers
         // GET: Sala
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sala.ToListAsync());
-        }
+            var salas = await _context.Sala.ToListAsync();
 
-        // GET: Sala/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
+            foreach (var s in salas)
             {
-                return NotFound();
+                var tipoSala = await _context.TipoSala
+                 .FirstOrDefaultAsync(t => t.Id == s.TipoSalaId);
+
+                s.TipoSala.Nombre = tipoSala.Nombre;
+                s.TipoSala.Id = s.TipoSalaId;
             }
 
-            var sala = await _context.Sala
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sala == null)
-            {
-                return NotFound();
-            }
-            
-            return View(sala);
+            return View(salas);
         }
+
+        
+
 
         // GET: Sala/Create
         public IActionResult Create()
         {
-            completarSalas();
+            completarTipoSalas();
             return View();
         }
 
+       
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas")] Sala sala)
+        [Authorize(Roles = nameof(Rol.Administrador))]
+        public async Task<IActionResult> Create( Sala sala)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +79,7 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
+            completarTipoSalas();
             return View(sala);
         }
 
@@ -118,34 +118,9 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
-        // GET: Sala/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        
 
-            var sala = await _context.Sala
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sala == null)
-            {
-                return NotFound();
-            }
-
-            return View(sala);
-        }
-
-        // POST: Sala/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var sala = await _context.Sala.FindAsync(id);
-            _context.Sala.Remove(sala);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        
 
         private bool SalaExists(Guid id)
         {
@@ -162,6 +137,17 @@ namespace ReservaCine.Controllers
         {
             ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        private async void completarTipoSalas()
+        {
+            ViewBag.TipoSalaId = await _context.TipoSala.ToListAsync();
+        }
+
+        private async void buscarTipoSala(Guid id)
+        {
+            ViewBag.TipoSala.Nombre = await _context.TipoSala
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace ReservaCine.Controllers
     public class UsuarioController : Controller
     {
         private readonly ReservaCineContext _context;
+        private readonly ISeguridad seguridad = new SeguridadBasica();
 
         public UsuarioController(ReservaCineContext context)
         {
@@ -48,7 +49,7 @@ namespace ReservaCine.Controllers
                 {
 
                     // Verificamos que coincida la contraseña
-                    var contraseña = Encoding.ASCII.GetBytes(Password);
+                    var contraseña = seguridad.EncriptarPass(Password);
                     if (contraseña.SequenceEqual(user.Password))
                     {
                         // Creamos los Claims (credencial de acceso con informacion del usuario)-- cookies
@@ -110,43 +111,53 @@ namespace ReservaCine.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registrarse(Usuario usuario, string pass, int? legajo, bool altaEmpleado = false)
+        public async Task<IActionResult> Registrarse(Cliente usuario, string pass)
         {
             if (ModelState.IsValid)
             {
-
-                if (altaEmpleado)
+                if (seguridad.ValidarPass(pass))
                 {
-                    var nuevoEmpleado = new Empleado();
-                    nuevoEmpleado.NombreUsuario = usuario.Nombre + usuario.DNI.ToString();
-                    //nuevoEmpleado.Password = seguridad.EncriptarPass(usuario.DNI.ToString());
-                    _context.Empleado.Add(nuevoEmpleado);
+
+                    var nuevoCliente = new Cliente
+                    {
+                        Nombre = usuario.Nombre,
+                        Apellido = usuario.Apellido,
+                        DNI = usuario.DNI,
+                        Domicilio = usuario.Domicilio,
+                        Email = usuario.Email,
+                        FechaAlta = DateTime.Today,
+                        Password = seguridad.EncriptarPass(pass),
+                        Id = Guid.NewGuid(),
+                        NombreUsuario = usuario.NombreUsuario,
+                        Telefono = usuario.Telefono,
+
+
+
+                    };
+
+
+                    _context.Cliente.Add(nuevoCliente);
+
+
+
+                    //usuario.Id = Guid.NewGuid();
+                    //usuario.
+
+                    //_context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Ingresar));
                 }
                 else
                 {
-                    var nuevoCliente = new Cliente();
-
-                    
-                    _context.Cliente.Add(nuevoCliente);
+                    ModelState.AddModelError(nameof(Usuario.Password), "La contraseña no cumple los requisitos");
                 }
-                                
 
-                usuario.Id = Guid.NewGuid();
-                usuario.Password = Encoding.ASCII.GetBytes(pass);
-                usuario.FechaAlta = DateTime.Today;
-                if (legajo == null)
-                {
-                    
-                }
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Ingresar));
+
             }
             return View(usuario);
         }
 
-    
-
+        
 
 
     }

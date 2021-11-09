@@ -65,6 +65,7 @@ namespace ReservaCine.Controllers
             return View();
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Pelicula/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -187,9 +188,10 @@ namespace ReservaCine.Controllers
 
             var peliculaFuncion = _context.Pelicula
                                             .Include(pelicula => pelicula.Funciones)
+                                                .ThenInclude(funcion => funcion.Sala)
                                             .FirstOrDefault(p => p.Id == id);
 
-            var funciones = peliculaFuncion.Funciones.Select(funPel => funPel);
+            var funciones = peliculaFuncion.Funciones.Select(funPel => funPel);            
 
             return View(funciones);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,11 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Reserva
-        public async Task<IActionResult> Index()//reservas historicas
+       public async Task<IActionResult> Index()//reservas historicas
         {
             var IdDeCliente = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
 
-            return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
+           return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
 
         public async Task<IActionResult> ReservasHistoricas()
@@ -33,7 +34,7 @@ namespace ReservaCine.Controllers
 
             return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && !r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
-
+       
         // GET: Reserva/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -76,6 +77,8 @@ namespace ReservaCine.Controllers
         }
 
         // GET: Reserva/Edit/5
+
+        //[Authorize(Roles = nameof(Rol.Administrador) + "," + nameof(Rol.Cliente))]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)

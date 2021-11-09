@@ -10,6 +10,7 @@ namespace ReservaCine.Controllers
        
 		public byte[] EncriptarPass(string pass);
         public bool ValidarPass(string pass);
+        
     }
 }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,8 +19,7 @@ namespace ReservaCine.Models
         [Range(0, 99999999999, ErrorMessage = "Ingrese un número válido")]
         public int Numero { get; set; }
 
-        [DisplayName("Tipo de Sala")]
-        public TipoSala tipoSala { get; set; }
+        
 
         [Required(ErrorMessage = "Ingrese la capacidad de butacas")]
         [Range(40, 200, ErrorMessage = "La cantidad ingresada es incorrecta")]
@@ -27,6 +27,11 @@ namespace ReservaCine.Models
         public int CapacidadButacas { get; set; }
 
         
+        [ForeignKey(nameof(TipoSala))]
+        public Guid TipoSalaId { get; set; }
+        [DisplayName("Tipo de Sala")]
+        public TipoSala TipoSala { get; set; }
+
         public IEnumerable<Funcion> Funciones { get; set; }
 
     }
