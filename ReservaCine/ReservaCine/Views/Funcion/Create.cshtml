@@ -3,9 +3,7 @@
 @{
     ViewData["Title"] = "Create";
 }
-<!--
-    <script src="~/js/site.js" asp-append-version="true"></script> @*LO PONGO ACA PORQUE NO ME TOMA EL DEL LAYOUT*@
--->
+<!--<script src="~/js/site.js" asp-append-version="true"></script> @*LO PONGO ACA PORQUE NO ME TOMA EL DEL LAYOUT*@-->
 
 <h1>Crear Función</h1>
 
@@ -35,11 +33,11 @@
                 <input asp-for="CantButacasDisponibles" class="form-control" />
                 <span asp-validation-for="CantButacasDisponibles" class="text-danger"></span>
             </div>
-            @*<div class="form-group form-check">
+            <div class="form-group form-check">
                     <label class="form-check-label">
                         <input class="form-check-input" asp-for="Confirmar" /> @Html.DisplayNameFor(model => model.Confirmar)
                     </label>
-                </div>*@@*NO LO DEBE PEDIR CUANDO CREA UNA FUNCION*@
+                </div>
                 <div class="form-group">
                     <label asp-for="SalaId" class="control-label"></label>
                     <br />
@@ -54,7 +52,7 @@
                     <span asp-validation-for="SalaId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="PeliculaId" class="control-label"></label>
+                    <label asp-for="Pelicula" class="control-label"></label>
                     <br />
                     <select id="ddlPelicula" name="PeliculaId" class="custom-select">
                         <option value="">-- Seleccionar Película --</option>

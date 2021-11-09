@@ -30,6 +30,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Duracion)
             </th>
+            
             <th>
             </th>
         </tr>
@@ -61,13 +62,14 @@
                         <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
                         <label>|</label>
                         <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                        <label>|</label>
                     }
-                    <br>
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a>
-                    <label>|</label>
+
                     <a asp-action="Funciones" asp-route-id="@item.Id">Funciones</a>
+                    
                 </td>
 
+                
             </tr>
 
         }
