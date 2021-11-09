@@ -160,5 +160,18 @@ namespace ReservaCine.Controllers
         {
             return _context.Cliente.Any(e => e.Id == id);
         }
+
+       /* private async void completarPeliculas()
+        {
+            ViewBag.PeliculaId = await _context.Pelicula.ToListAsync();
+        }
+        public Task<IActionResult> ReservarPelicula (Guid? id)
+        {
+            var reserva = new Reserva();
+
+            completarPeliculas();
+
+            return View(reserva); 
+        }*/
     }
 }

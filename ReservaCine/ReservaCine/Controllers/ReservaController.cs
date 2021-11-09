@@ -56,6 +56,7 @@ namespace ReservaCine.Controllers
         // GET: Reserva/Create
         public IActionResult Create()
         {
+            completarFuncion();
             return View();
         }
 
@@ -69,6 +70,9 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 reserva.Id = Guid.NewGuid();
+                var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+                reserva.ClienteId = clienteId;
+
                 _context.Add(reserva);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -161,6 +165,11 @@ namespace ReservaCine.Controllers
         private bool ReservaExists(Guid id)
         {
             return _context.Reserva.Any(e => e.Id == id);
+        }
+
+        private async void completarFuncion()
+        {
+            ViewBag.FuncionId = await _context.Funcion.ToListAsync();
         }
     }
 }
