@@ -23,6 +23,8 @@ namespace ReservaCine.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
+
         // GET: Empleado
         public async Task<IActionResult> Index()
         {
