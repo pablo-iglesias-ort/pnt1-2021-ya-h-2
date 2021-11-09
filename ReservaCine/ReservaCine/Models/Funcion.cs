@@ -15,10 +15,11 @@ namespace ReservaCine.Models
 
 
         [Required(ErrorMessage = "Por favor ingrese una fecha")]
+        [DataType(DataType.Date)]
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
 
-
+        [DataType(DataType.Time)]
         [Required(ErrorMessage = "Por favor ingrese una hora")]
         [Display(Name = "Hora")]
         public DateTime Hora { get; set; }
@@ -51,6 +52,7 @@ namespace ReservaCine.Models
         [Required(ErrorMessage = "Por favor seleccione una Película")]
         [ForeignKey(nameof(Pelicula))]
         public Guid PeliculaId { get; set; }
+
         [Display(Name = "Película")]
         public Pelicula Pelicula { get; set; }
 

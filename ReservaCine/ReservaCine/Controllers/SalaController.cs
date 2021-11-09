@@ -37,25 +37,9 @@ namespace ReservaCine.Controllers
             return View(salas);
         }
 
-        // GET: Sala/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sala = await _context.Sala
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sala == null)
-            {
-                return NotFound();
-            }
-            
-            return View(sala);
-        }
-
         
+
+
         // GET: Sala/Create
         public IActionResult Create()
         {
@@ -95,6 +79,7 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
+            completarTipoSalas();
             return View(sala);
         }
 
@@ -133,34 +118,9 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
-        // GET: Sala/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        
 
-            var sala = await _context.Sala
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sala == null)
-            {
-                return NotFound();
-            }
-
-            return View(sala);
-        }
-
-        // POST: Sala/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var sala = await _context.Sala.FindAsync(id);
-            _context.Sala.Remove(sala);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        
 
         private bool SalaExists(Guid id)
         {
@@ -182,6 +142,12 @@ namespace ReservaCine.Controllers
         private async void completarTipoSalas()
         {
             ViewBag.TipoSalaId = await _context.TipoSala.ToListAsync();
+        }
+
+        private async void buscarTipoSala(Guid id)
+        {
+            ViewBag.TipoSala.Nombre = await _context.TipoSala
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

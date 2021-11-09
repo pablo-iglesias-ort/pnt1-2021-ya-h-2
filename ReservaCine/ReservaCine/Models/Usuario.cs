@@ -44,11 +44,9 @@ namespace ReservaCine.Models
         public DateTime FechaAlta { get; set; }
 
         
-        
         [DisplayName("Nombre de Usuario")]
         public String NombreUsuario { get; set; }
 
-       
         
         [DisplayName("Contraseña")]
         [ScaffoldColumn(false)] //para ocultar en columna
