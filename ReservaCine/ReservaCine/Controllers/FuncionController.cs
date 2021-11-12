@@ -67,6 +67,7 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 funcion.Id = Guid.NewGuid();
+                funcion.Hora = new DateTime(1, 1, 1, funcion.Hora.Hour, funcion.Hora.Minute, funcion.Hora.Second);
                 _context.Add(funcion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
