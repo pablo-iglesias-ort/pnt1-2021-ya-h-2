@@ -29,8 +29,14 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Pelicula" asp-action="Index">Películas</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Mis Reservas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
+                    </li>
 
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.IsInRole(nameof(Rol.Administrador)))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
@@ -44,18 +50,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Genero" asp-action="Index">Generos</a>
                         </li>
                     }
 
 
-                    <li class="nav-item">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Funcion" asp-action="Index">Funciones</a>
-                    </li>
+
 
                 </ul>
             </div>

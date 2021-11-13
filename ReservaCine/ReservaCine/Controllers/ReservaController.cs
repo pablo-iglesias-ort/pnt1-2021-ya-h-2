@@ -56,6 +56,7 @@ namespace ReservaCine.Controllers
         // GET: Reserva/Create
         public IActionResult Create()
         {
+            completarFuncion();
             return View();
         }
 
@@ -69,6 +70,9 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 reserva.Id = Guid.NewGuid();
+                var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+                reserva.ClienteId = clienteId;
+
                 _context.Add(reserva);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -158,9 +162,48 @@ namespace ReservaCine.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> SeleccionarPelicula()
+        {
+            var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+            if (ClienteTieneReservaActiva(clienteId))
+            {
+                return RedirectToAction(nameof(Details));
+            }
+
+            // peliculas con funciones confirmadas y butacas disponibles
+            var peliculasDisponibles = await _context.Funcion.Include(f => f.Pelicula)
+                                                       .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
+                                                       .Select(f => f.Pelicula)
+                                                       .ToListAsync();
+
+            return View(peliculasDisponibles);            
+        }
+
+        public async Task<IActionResult> SeleccionarFuncion(Guid peliculaId, int butacas)
+        {
+            
+            // peliculas con funciones confirmadas y butacas disponibles
+            var funcionesDisponibles = await _context.Funcion
+                                                       .Where(f => f.CantButacasDisponibles >= butacas && f.Confirmar && f.PeliculaId == peliculaId)
+                                                       .ToListAsync();
+
+            return View(funcionesDisponibles);
+        }
+
+        private bool ClienteTieneReservaActiva(Guid clienteId)
+        {
+            var reserva = _context.Reserva.FirstOrDefault(r => r.Activa && r.ClienteId == clienteId);
+            return reserva != null;
+        }
+
         private bool ReservaExists(Guid id)
         {
             return _context.Reserva.Any(e => e.Id == id);
+        }
+
+        private async void completarFuncion()
+        {
+            ViewBag.FuncionId = await _context.Funcion.ToListAsync();
         }
     }
 }

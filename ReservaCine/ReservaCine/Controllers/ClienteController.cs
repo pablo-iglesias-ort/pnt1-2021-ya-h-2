@@ -11,7 +11,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ClienteController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -20,7 +20,6 @@ namespace ReservaCine.Controllers
         {
             _context = context;
         }
-
         [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Cliente
         public async Task<IActionResult> Index()
@@ -33,7 +32,11 @@ namespace ReservaCine.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                id = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+                if (id == null)
+                {
+                    return NotFound();
+                }                
             }
 
             var cliente = await _context.Cliente
@@ -45,7 +48,7 @@ namespace ReservaCine.Controllers
 
             return View(cliente);
         }
-
+        
         // GET: Cliente/Create
         public IActionResult Create()
         {
@@ -95,7 +98,7 @@ namespace ReservaCine.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
        
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta")] Cliente cliente)
+        public async Task<IActionResult> Edit(Guid id, Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -106,7 +109,13 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    _context.Update(cliente);
+
+                    var clienteOriginal = _context.Cliente.FirstOrDefault(c => c.Id == id);
+                    clienteOriginal.Email = cliente.Email;
+                    clienteOriginal.Domicilio = cliente.Domicilio;
+                    clienteOriginal.Telefono = cliente.Telefono;
+
+                    _context.Update(clienteOriginal);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -120,7 +129,7 @@ namespace ReservaCine.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                 return RedirectToAction(nameof(Details), new { Id = id });
             }
             return View(cliente);
         }
@@ -161,5 +170,6 @@ namespace ReservaCine.Controllers
         {
             return _context.Cliente.Any(e => e.Id == id);
         }
+
     }
 }
