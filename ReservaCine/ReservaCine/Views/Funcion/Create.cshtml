@@ -34,40 +34,46 @@
                 <span asp-validation-for="CantButacasDisponibles" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Confirmar" /> @Html.DisplayNameFor(model => model.Confirmar)
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label asp-for="SalaId" class="control-label"></label>
-                    <br />
-                    <select id="ddlSala" name="SalaId" class="custom-select">
-                        <option value="">-- Seleccionar Sala --</option>
-                        @foreach (Sala sala in ViewBag.SalaId)
-                        {
-                            <option value="@sala.Id">@sala.Numero</option>
-                        }
-                    </select>
-                    <input asp-for="SalaId" type="hidden" name="SalaId" class="form-control" />
-                    <span asp-validation-for="SalaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Pelicula" class="control-label"></label>
-                    <br />
-                    <select id="ddlPelicula" name="PeliculaId" class="custom-select">
-                        <option value="">-- Seleccionar Película --</option>
-                        @foreach (Pelicula pelicula in ViewBag.PeliculaId)
-                        {
-                            <option value="@pelicula.Id">@pelicula.Titulo</option>
-                        }
-                    </select>
-                    <input asp-for="PeliculaId" type="hidden" name="PeliculaId" class="form-control" />
-                    <span asp-validation-for="PeliculaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Crear" class="btn btn-primary" />
-                </div>
-            </form>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Confirmar" /> @Html.DisplayNameFor(model => model.Confirmar)
+                </label>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="Sala" class="control-label"></label>
+                @Html.DropDownListFor(model => model.SalaId, (IEnumerable<SelectListItem>)ViewBag.Salas, new { @class = "custom-select" })
+                <span asp-validation-for="SalaId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="SalaId" class="control-label"></label>
+                <br />
+                <select id="ddlSala" name="SalaId" class="custom-select">
+                    <option value="">-- Seleccionar Sala --</option>
+                    @foreach (Sala sala in ViewBag.SalaId)
+                    {
+                        <option value="@sala.Id">@sala.Numero</option>
+                    }
+                </select>
+                <input asp-for="SalaId" type="hidden" name="SalaId" class="form-control" />
+                <span asp-validation-for="SalaId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Pelicula" class="control-label"></label>
+                <br />
+                <select id="ddlPelicula" name="PeliculaId" class="custom-select">
+                    <option value="">-- Seleccionar Película --</option>
+                    @foreach (Pelicula pelicula in ViewBag.PeliculaId)
+                    {
+                        <option value="@pelicula.Id">@pelicula.Titulo</option>
+                    }
+                </select>
+                <input asp-for="PeliculaId" type="hidden" name="PeliculaId" class="form-control" />
+                <span asp-validation-for="PeliculaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
         </div>
     </div>
 

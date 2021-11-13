@@ -67,12 +67,17 @@ namespace ReservaCine.Controllers
             if (ModelState.IsValid)
             {
                 funcion.Id = Guid.NewGuid();
+                funcion.Hora = new DateTime(1, 1, 1, funcion.Hora.Hour, funcion.Hora.Minute, funcion.Hora.Second);
+                
                 _context.Add(funcion);
                 await _context.SaveChangesAsync();
+
+               
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PeliculaId"] = new SelectList(_context.Pelicula, "Id", "Titulo", funcion.PeliculaId);
             ViewData["SalaId"] = new SelectList(_context.Sala, "Id", "Numero", funcion.SalaId);
+          
             return View(funcion);
         }
 
@@ -205,5 +210,14 @@ namespace ReservaCine.Controllers
             ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
+        //private async void mostrarSalas()
+        //{
+        //    var tipoSalas = await _context.TipoSala
+        //                                .Select(t => new SelectListItem(t.Nombre, t.Id.ToString()))
+        //                                .ToListAsync();
+
+        //    ViewBag.TipoSalas = tipoSalas;
+        //}
+
     }
 }
