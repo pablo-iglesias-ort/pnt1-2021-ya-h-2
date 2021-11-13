@@ -18,11 +18,15 @@
                 <label asp-for="TipoSala" class="control-label"></label>
                 <br />
                 <select id="ddlTipoSala" name="TipoSalaId" class="custom-select">
-                    <option value="">-- Seleccionar el tipo de sala --</option>
-                    @foreach (TipoSala tipo in ViewBag.TipoSalaId)
+                    @foreach (TipoSala tiposala in ViewBag.TipoSalaId)
                     {
-                        <option value="@tipo.Id">@tipo.Nombre</option>
+                        if (@tiposala.Id == Model.TipoSalaId)
+                        {
+                            <option value="@tiposala.Id" selected>@tiposala.Nombre</option>
+                        }
+                        <option value="@tiposala.Id">@tiposala.Nombre</option>
                     }
+                    
                 </select>
                 <input asp-for="TipoSalaId" type="hidden" name="TipoSalaId" class="form-control" />
                 <span asp-validation-for="TipoSalaId" class="text-danger"></span>

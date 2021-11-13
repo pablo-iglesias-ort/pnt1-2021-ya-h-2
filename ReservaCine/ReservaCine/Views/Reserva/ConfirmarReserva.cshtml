@@ -1,0 +1,65 @@
+﻿@model ReservaCine.Models.Funcion
+
+@{
+    ViewData["Title"] = "ConfirmarReserva";
+}
+
+<h1>Estos son los detalles de Reserva de tu película</h1>
+<h3>¿Está seguro de reservar está Película?</h3>
+<div>
+    <dl class="row text-light">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Pelicula)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Pelicula.Titulo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Hora)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Hora)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sala)
+        </dt>
+        <dd>
+            @{
+                var sala = Model.Sala.Numero + " - " + Model.Sala.TipoSala.Nombre;
+            }
+            @sala
+        </dd>
+        <dt class="col-sm-2">
+            Precio
+        </dt>
+        <dd>
+            @{
+                var precio = Model.Sala.TipoSala.Precio;
+            }
+            @precio
+
+        </dd>
+        <dt class="col-sm-2">
+            Butacas
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.Butacas
+        </dd>
+    </dl>
+</div>
+<div>
+
+    <form asp-controller="Reserva" asp-action="ReservaConfirmada" method="post">
+        <input name="FuncionId" type="hidden" value="@Model.Id" />
+        <input name="butacas" type="hidden" value="@ViewBag.Butacas" />
+        <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-primary">Confirmar</button> @*agrego estilo al botón*@
+    </form>
+    <a asp-action="SeleccionarFuncion" asp-route-id="@Model.Id">Volver a Funciones Disponibles</a>
+
+</div>

@@ -23,7 +23,10 @@ namespace ReservaCine.Controllers
         // GET: Funcion
         public async Task<IActionResult> Index()
         {
-            var reservaCineContext = _context.Funcion.Include(f => f.Pelicula).Include(f => f.Sala);
+            var reservaCineContext = _context.Funcion
+                                    .Include(f => f.Pelicula)
+                                    .Include(f => f.Sala)
+                                    .ThenInclude(f => f.TipoSala);
             return View(await reservaCineContext.ToListAsync());
         }
 

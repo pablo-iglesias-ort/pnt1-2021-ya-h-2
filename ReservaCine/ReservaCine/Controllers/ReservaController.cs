@@ -20,8 +20,9 @@ namespace ReservaCine.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador) + "," + nameof(Rol.Cliente))]
         // GET: Reserva
-       public async Task<IActionResult> Index()//reservas historicas
+        public async Task<IActionResult> Index()//reservas historicas
         {
             var IdDeCliente = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
 
@@ -44,6 +45,8 @@ namespace ReservaCine.Controllers
             }
 
             var reserva = await _context.Reserva
+                .Include(r => r.Funcion)
+                .ThenInclude(r => r.Pelicula)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reserva == null)
             {
@@ -156,24 +159,36 @@ namespace ReservaCine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var reserva = await _context.Reserva.FindAsync(id);
+           
+           
+            var reserva = await _context.Reserva
+                                                .Include(r=>r.Funcion)
+                                                .FirstOrDefaultAsync(f => f.Id == id);
+            reserva.Funcion.CantButacasDisponibles = reserva.Funcion.CantButacasDisponibles + reserva.CantidadButacas;
+           
             _context.Reserva.Remove(reserva);
+            _context.Update(reserva.Funcion);
+
             await _context.SaveChangesAsync();
+          
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> SeleccionarPelicula()
         {
             var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
-            if (ClienteTieneReservaActiva(clienteId))
+            if (ClienteTieneReservaActiva(clienteId, out Guid? reservaId))
             {
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Details), new {id = reservaId});
             }
 
             // peliculas con funciones confirmadas y butacas disponibles
-            var peliculasDisponibles = await _context.Funcion.Include(f => f.Pelicula)
-                                                       .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
+            var peliculasDisponibles = await _context.Funcion
+                                                        .Include(f => f.Pelicula)
+                                                         .ThenInclude(f => f.Genero)
+                                                        .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
                                                        .Select(f => f.Pelicula)
+                                                      .Distinct()
                                                        .ToListAsync();
 
             return View(peliculasDisponibles);            
@@ -185,14 +200,55 @@ namespace ReservaCine.Controllers
             // peliculas con funciones confirmadas y butacas disponibles
             var funcionesDisponibles = await _context.Funcion
                                                        .Where(f => f.CantButacasDisponibles >= butacas && f.Confirmar && f.PeliculaId == peliculaId)
+                                                       .Include(f=> f.Sala)
+                                                       .ThenInclude(f=> f.TipoSala)
+                                                       .Include(f=> f.Pelicula)
                                                        .ToListAsync();
-
+            ViewBag.Butacas = butacas;
             return View(funcionesDisponibles);
         }
 
-        private bool ClienteTieneReservaActiva(Guid clienteId)
+        public async Task<IActionResult> ConfirmarReserva(Guid FuncionId, int butacas)
+        {
+        
+            var peliculaReservada = await _context.Funcion
+                                                        .Include(f => f.Sala)
+                                                       .ThenInclude(f => f.TipoSala)
+                                                       .Include(f => f.Pelicula)
+                                                       .FirstOrDefaultAsync(f => f.Id == FuncionId);
+            ViewBag.Butacas = butacas;
+
+            return View(peliculaReservada);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReservaConfirmada(Guid FuncionId, int butacas)
+        {
+            var reserva = new Reserva();
+            reserva.Id = Guid.NewGuid();
+            reserva.FuncionId = FuncionId;
+            reserva.ClienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+            reserva.Activa = true;
+            reserva.CantidadButacas = butacas;
+            reserva.FechaAlta = DateTime.Now;
+
+            _context.Reserva.Add(reserva);
+
+            var funcionReservada = await _context.Funcion
+                                                .FirstOrDefaultAsync(f => f.Id == FuncionId);
+            funcionReservada.CantButacasDisponibles = funcionReservada.CantButacasDisponibles - butacas;
+
+            _context.Update(funcionReservada);
+
+            await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details), new { id = reserva.Id });
+            }
+           
+        
+        private bool ClienteTieneReservaActiva(Guid clienteId, out Guid? reservaId)
         {
             var reserva = _context.Reserva.FirstOrDefault(r => r.Activa && r.ClienteId == clienteId);
+            reservaId = reserva?.Id;
             return reserva != null;
         }
 

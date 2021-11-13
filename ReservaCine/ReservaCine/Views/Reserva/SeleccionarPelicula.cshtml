@@ -19,7 +19,13 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Duracion)
+               
             </th>
+            <th>
+                Seleccionar Cantidad Butacas
+                <br />
+            </th>
+
         </tr>
     </thead>
 
@@ -34,20 +40,29 @@
                     @Html.DisplayFor(modelItem => item.Descripcion)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Genero)
+                    @Html.DisplayFor(modelItem => item.Genero.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Duracion)
+                    <br/>
                 </td>
+             
                 <td>
                     <form asp-controller="Reserva" asp-action="SeleccionarFuncion" method="post">
-                        <input name="peliculaId" type="hidden" value="@item.Id"/>
+                        <input name="peliculaId" type="hidden" value="@item.Id" />
                         <div class="form-group">
                             <input name="butacas" class="form-control" />
                         </div>
                         <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Seleccionar</button>
                     </form>
+                    
+                        <form asp-controller="Reserva" asp-action="Index" method="post">
+                            <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
+                        </form>
+                   
                 </td>
+
+
             </tr>
 
         }
