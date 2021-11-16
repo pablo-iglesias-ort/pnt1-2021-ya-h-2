@@ -39,7 +39,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.NombreUsuario)
             </th>
-            <th></th>
+            <th>
+
+            </th>
+
         </tr>
     </thead>
     <tbody>
@@ -73,6 +76,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.NombreUsuario)
                 </td>
+
                 <td>
                     @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
                     {

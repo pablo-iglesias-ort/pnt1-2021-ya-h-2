@@ -23,3 +23,4 @@ $("body").on("change", "#ddlFuncion", function () {
     $("input[name=FuncionId]").val($(this).find("option:selected").val());
 });
 
+

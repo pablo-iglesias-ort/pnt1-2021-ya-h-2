@@ -145,6 +145,8 @@ namespace ReservaCine.Controllers
             }
 
             var reserva = await _context.Reserva
+                 .Include(r => r.Funcion)
+                 .ThenInclude(r => r.Pelicula)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reserva == null)
             {
@@ -163,7 +165,10 @@ namespace ReservaCine.Controllers
            
             var reserva = await _context.Reserva
                                                 .Include(r=>r.Funcion)
+                                                .ThenInclude(r => r.Pelicula)
                                                 .FirstOrDefaultAsync(f => f.Id == id);
+
+        
             reserva.Funcion.CantButacasDisponibles = reserva.Funcion.CantButacasDisponibles + reserva.CantidadButacas;
            
             _context.Reserva.Remove(reserva);

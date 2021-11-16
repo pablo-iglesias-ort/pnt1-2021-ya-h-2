@@ -28,7 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CantButacasDisponibles)
             </th>
+            <th>
 
+            </th>
 
         </tr>
     </thead>
@@ -63,18 +65,20 @@
                 <form asp-controller="Reserva" asp-action="ConfirmarReserva" method="post">
                     <input name="FuncionId" type="hidden" value="@item.Id" />
                     <input name="butacas" type="hidden" value="@ViewBag.Butacas" />
+                    <input name="peliculaId" type="hidden" value="@item.Id" />
                     <div class="form-group">
 
                     </div>
-                    <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Seleccionar</button>
+                    <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-success">Seleccionar</button>
                 </form>
             </td>
-            <form asp-controller="Reserva" asp-action="Index" method="post">
-                <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-danger">Salir</button> @*agrego estilo al botón salir*@
-            </form>
+            
 
 
         </tr>
         }
     </tbody>
 </table>
+<form asp-controller="Reserva" asp-action="SeleccionarPelicula" method="post">
+    <button type="submit" class="nav-link font-weight-bold text-light float-right border border-dark btn btn-danger">Volver</button> @*agrego estilo al botón salir*@
+</form>

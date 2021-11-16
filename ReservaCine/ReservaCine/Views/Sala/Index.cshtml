@@ -4,13 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Salas</h1>
 
 <p>
-    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
-    {
-        <a asp-action="Create">Crear nueva Sala</a>
-    }
+    <a asp-action="Create">Crear Nueva Sala</a>
 </p>
 <table class="table text-dark table-striped table-light">
     <thead class="thead-dark">
@@ -20,19 +17,16 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.TipoSala.Nombre)
+                @Html.DisplayNameFor(model => model.TipoSala)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CapacidadButacas)
             </th>
-            <th>
-
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Numero)
@@ -45,11 +39,10 @@
                 @Html.DisplayFor(modelItem => item.CapacidadButacas)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
-
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> 
+                
             </td>
-
         </tr>
-        }
+}
     </tbody>
 </table>

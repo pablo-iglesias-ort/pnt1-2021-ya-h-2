@@ -9,37 +9,34 @@
 <h4>Sala</h4>
 <hr />
 <div class="row text-light">
-
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="TipoSala" class="control-label"></label>
-                <br />
-                <select id="ddlTipoSala" name="TipoSalaId" class="custom-select">
-                    @foreach (TipoSala tiposala in ViewBag.TipoSalaId)
-                    {
-                        if (@tiposala.Id == Model.TipoSalaId)
-                        {
-                            <option value="@tiposala.Id" selected>@tiposala.Nombre</option>
-                        }
-                        <option value="@tiposala.Id">@tiposala.Nombre</option>
-                    }
-                    
-                </select>
-                <input asp-for="TipoSalaId" type="hidden" name="TipoSalaId" class="form-control" />
+                <label asp-for="Numero" class="control-label"></label>
+                <input readonly="readonly" asp-for="Numero" class="form-control" />
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CapacidadButacas" class="control-label"></label>
+                <input readonly="readonly" asp-for="CapacidadButacas" class="form-control" />
+                <span asp-validation-for="CapacidadButacas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoSalaId" class="control-label">Tipo de Sala</label>
+                <select asp-for="TipoSalaId" class="form-control" asp-items="ViewBag.TipoSalaId"></select>
                 <span asp-validation-for="TipoSalaId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Volver</a>
+    <a asp-action="Index">Volver a la Lista</a>
 </div>
 
 @section Scripts {

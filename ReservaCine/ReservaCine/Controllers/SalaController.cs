@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,38 +22,42 @@ namespace ReservaCine.Controllers
         // GET: Sala
         public async Task<IActionResult> Index()
         {
-            var salas = await _context.Sala.ToListAsync();
-
-            foreach (var s in salas)
-            {
-                var tipoSala = await _context.TipoSala
-                 .FirstOrDefaultAsync(t => t.Id == s.TipoSalaId);
-
-                s.TipoSala.Nombre = tipoSala.Nombre;
-                s.TipoSala.Id = s.TipoSalaId;
-            }
-
-            return View(salas);
+            var reservaCineContext = _context.Sala.Include(s => s.TipoSala);
+            return View(await reservaCineContext.ToListAsync());
         }
 
-        
+        // GET: Sala/Details/5
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var sala = await _context.Sala
+                .Include(s => s.TipoSala)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+
+            return View(sala);
+        }
 
         // GET: Sala/Create
         public IActionResult Create()
         {
-            completarTipoSalas();
+            ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre");
             return View();
         }
 
-       
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(Rol.Administrador))]
-        public async Task<IActionResult> Create( Sala sala)
+        public async Task<IActionResult> Create([Bind("Id,Numero,CapacidadButacas,TipoSalaId")] Sala sala)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +66,7 @@ namespace ReservaCine.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre", sala.TipoSalaId);
             return View(sala);
         }
 
@@ -79,7 +83,7 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-            completarTipoSalas();
+            ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre", sala.TipoSalaId);
             return View(sala);
         }
 
@@ -88,7 +92,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Numero,CapacidadButacas")] Sala sala)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Numero,CapacidadButacas,TipoSalaId")] Sala sala)
         {
             if (id != sala.Id)
             {
@@ -115,39 +119,43 @@ namespace ReservaCine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre", sala.TipoSalaId);
             return View(sala);
         }
 
-        
+        // GET: Sala/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        
+            var sala = await _context.Sala
+                .Include(s => s.TipoSala)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (sala == null)
+            {
+                return NotFound();
+            }
+
+            return View(sala);
+        }
+
+        // POST: Sala/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var sala = await _context.Sala.FindAsync(id);
+            _context.Sala.Remove(sala);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool SalaExists(Guid id)
         {
             return _context.Sala.Any(e => e.Id == id);
-        }
-
-        private async void completarSalas()
-        {
-            ViewBag.SalaId = await _context.Sala.ToListAsync();
-        }
-
-        //para buscar  y llamar al metodo en el details,delete
-        private async void buscarSala(Guid id)
-        {
-            ViewBag.SalaNumero = await _context.Sala
-                .FirstOrDefaultAsync(s => s.Id == id);
-        }
-
-        private async void completarTipoSalas()
-        {
-            ViewBag.TipoSalaId = await _context.TipoSala.ToListAsync();
-        }
-
-        private async void buscarTipoSala(Guid id)
-        {
-            ViewBag.TipoSala.Nombre = await _context.TipoSala
-                .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }
