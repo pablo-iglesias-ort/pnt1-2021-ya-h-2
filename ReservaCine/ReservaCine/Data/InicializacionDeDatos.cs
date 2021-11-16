@@ -146,8 +146,7 @@ namespace ReservaCine.Data
 			nuevaFuncion.PeliculaId = nuevaPelicula.Id;
 			nuevaFuncion.SalaId = newSala.Id;
 			nuevaFuncion.Fecha = DateTime.Now.AddDays(14);
-			//uevaFuncion.Hora = Time
-			// AVERIGUAR COMO CARGAR HORARIO 
+			nuevaFuncion.Hora = new DateTime(1,1,1, 16, 40,0);
 
 			context.Funcion.Add(nuevaFuncion);
 			context.SaveChanges();

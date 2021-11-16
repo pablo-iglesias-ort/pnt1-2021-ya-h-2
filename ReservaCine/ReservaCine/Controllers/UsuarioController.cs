@@ -140,10 +140,7 @@ namespace ReservaCine.Controllers
 
 
 
-                    //usuario.Id = Guid.NewGuid();
-                    //usuario.
-
-                    //_context.Add(usuario);
+           
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Ingresar));
                 }

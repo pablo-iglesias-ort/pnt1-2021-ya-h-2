@@ -22,18 +22,19 @@
                 @Html.DisplayNameFor(model => model.Hora)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Pelicula)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CantButacasDisponibles)
             </th>
-           
+
             <th>
                 @Html.DisplayNameFor(model => model.Sala)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pelicula)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -47,25 +48,30 @@
                 @Html.DisplayFor(modelItem => item.Hora)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CantButacasDisponibles)
             </td>
-           
+
             <td>
-                @Html.DisplayFor(modelItem => item.Sala.Numero)
+                @{
+                    var sala = item.Sala.Numero + " - " + item.Sala.TipoSala.Nombre;
+                }
+                @sala
+               
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
-            </td>
+
             <td>
                 @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
                     <label>|</label>
                     <a asp-action="Delete" asp-route-id="@item.Id">Elimnar</a>
-                  
+
                 }
 
             </td>

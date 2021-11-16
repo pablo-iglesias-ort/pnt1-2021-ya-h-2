@@ -4,27 +4,43 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Mis Reservas Activas</h1>
 
 <div>
     <h4>Reserva</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <dl class="row text-light">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FechaAlta)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaAlta)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            Película
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Funcion.Pelicula.Titulo)
+        </dd>
+
+        <dt class="col-sm-2">
+            Horario
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var horario = Model.Funcion.Fecha.Day + "/" + Model.Funcion.Fecha.Month + "/" + Model.Funcion.Fecha.Year + " - " + Model.Funcion.Hora.TimeOfDay;
+            }
+            @horario
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CantidadButacas)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CantidadButacas)
         </dd>
+
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver a la Lista</a>
 </div>

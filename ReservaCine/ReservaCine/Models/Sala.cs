@@ -17,6 +17,7 @@ namespace ReservaCine.Models
 
         [Required(ErrorMessage = "Ingrese un número")]
         [Range(0, 99999999999, ErrorMessage = "Ingrese un número válido")]
+        [DisplayName("Número de Sala")]
         public int Numero { get; set; }
 
         
