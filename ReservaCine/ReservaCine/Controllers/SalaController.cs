@@ -79,8 +79,17 @@ namespace ReservaCine.Controllers
             {
                 return NotFound();
             }
-            completarTipoSalas();
+            mostrarTipoSalas();
             return View(sala);
+        }
+
+        private async void mostrarTipoSalas()
+        {
+            var tipoSalas = await _context.TipoSala
+                                        .Select(t => new SelectListItem(t.Nombre, t.Id.ToString()))
+                                        .ToListAsync();
+
+            ViewBag.TipoSalas = tipoSalas;
         }
 
         // POST: Sala/Edit/5
@@ -88,7 +97,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Numero,CapacidadButacas")] Sala sala)
+        public async Task<IActionResult> Edit(Guid id, Sala sala)
         {
             if (id != sala.Id)
             {
@@ -99,7 +108,9 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    _context.Update(sala);
+                    var salaNueva = _context.Sala.FirstOrDefault(s => s.Id == id);
+                   salaNueva.TipoSalaId = sala.TipoSalaId;
+                    _context.Update(salaNueva);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -115,6 +126,7 @@ namespace ReservaCine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            mostrarTipoSalas();
             return View(sala);
         }
 
@@ -146,7 +158,7 @@ namespace ReservaCine.Controllers
 
         private async void buscarTipoSala(Guid id)
         {
-            ViewBag.TipoSala.Nombre = await _context.TipoSala
+            ViewBag.TipoSalaNombre = await _context.TipoSala
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }

@@ -205,7 +205,7 @@ namespace ReservaCine.Controllers
         //para buscar genero y llamar al metodo en el details,delete
         private async void buscarGenero(Guid id)
         {
-            ViewBag.GeneroNombre = await _context.Genero
+            ViewBag.Genero= await _context.Genero
                 .FirstOrDefaultAsync(g => g.Id == id);
         }
 

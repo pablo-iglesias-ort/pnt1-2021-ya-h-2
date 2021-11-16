@@ -71,10 +71,12 @@
                             @if (User.IsInRole(nameof(Rol.Administrador)))
 
                             {
-                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Empleado"                               asp-action="Details"   asp-route-id=@User.FindFirstValue("IdDeUsuario")>@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area="" asp-controller="Empleado"
+                               asp-action="Details"   asp-route-id=@User.FindFirstValue("IdDeUsuario")>@User.FindFirstValue(ClaimTypes.GivenName)</a>
                             }
                             else if((User.IsInRole(nameof(Rol.Cliente)))) {
-                                <a class="nav-link text-success font-italic" asp-area=""  asp-controller="Cliente"                               asp-action="Details"   asp-route-id=@User.FindFirstValue("IdDeUsuario")>@User.FindFirstValue(ClaimTypes.GivenName)</a>
+                                <a class="nav-link text-success font-italic" asp-area=""  asp-controller="Cliente"
+                               asp-action="Details"   asp-route-id=@User.FindFirstValue("IdDeUsuario")>@User.FindFirstValue(ClaimTypes.GivenName)</a>
                                
 
                             }
