@@ -201,7 +201,11 @@ namespace ReservaCine.Controllers
 
         public async Task<IActionResult> SeleccionarFuncion(Guid peliculaId, int butacas)
         {
-            
+            if(butacas <= 0)
+            {
+                
+                return RedirectToAction(nameof(SeleccionarPelicula));
+            }
             // peliculas con funciones confirmadas y butacas disponibles
             var funcionesDisponibles = await _context.Funcion
                                                        .Where(f => f.CantButacasDisponibles >= butacas && f.Confirmar && f.PeliculaId == peliculaId)
@@ -215,7 +219,8 @@ namespace ReservaCine.Controllers
 
         public async Task<IActionResult> ConfirmarReserva(Guid FuncionId, int butacas)
         {
-        
+            //TODO -- COMO MANDAR UN MSJ DE ERROR EN CASO DE QUERER RESERVAR SIN HABER SELECCIONADO LAS BUTACAS
+           
             var peliculaReservada = await _context.Funcion
                                                         .Include(f => f.Sala)
                                                        .ThenInclude(f => f.TipoSala)

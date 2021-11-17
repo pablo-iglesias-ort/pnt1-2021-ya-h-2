@@ -116,15 +116,21 @@ namespace ReservaCine.Controllers
             buscarPelicula(funcion.PeliculaId);
             completarPeliculas();
             completarSalas();
+            obtenerTodasLasSalas();
+
+
+
+            return View(funcion);
+        }
+        private async void obtenerTodasLasSalas()
+        {
 
             var salas = await _context.Sala
                                         .Include(s => s.TipoSala)
-                                        .Select(s => new SelectListItem(string.Concat(s.Numero, " - ", s.TipoSala.Nombre, " - ",s.CapacidadButacas),s.Id.ToString()))
+                                        .Select(s => new SelectListItem(string.Concat(s.Numero, " - ", s.TipoSala.Nombre, " - ", s.CapacidadButacas), s.Id.ToString()))
                                         .ToListAsync();
 
             ViewBag.Salas = salas;
-
-            return View(funcion);
         }
 
         [Authorize(Roles = nameof(Rol.Administrador))]
@@ -142,10 +148,35 @@ namespace ReservaCine.Controllers
 
             if (ModelState.IsValid)
             {
+                
+              
                 try
                 {
+                    if (!funcion.Confirmar)
+                    {
+                        var tieneReservas = _context.Reserva
+                                        .Any(r => r.FuncionId == funcion.Id && r.Activa);
+                                        
+                        if (tieneReservas)
+                        {
+
+
+                            ModelState.AddModelError(nameof(Funcion.Confirmar), "No sé puede cancelar la función, ya que posee reservas activas.");
+
+                            ViewData["PeliculaId"] = new SelectList(_context.Pelicula, "Id", "Titulo", funcion.PeliculaId);
+                            ViewData["SalaId"] = new SelectList(_context.Sala, "Id", "Numero", funcion.SalaId);
+                            completarPeliculas();
+                            completarSalas();
+                            obtenerTodasLasSalas();
+
+                            return View(funcion);
+                        }
+
+
+                    }
                     _context.Update(funcion);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,6 +189,7 @@ namespace ReservaCine.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PeliculaId"] = new SelectList(_context.Pelicula, "Id", "Titulo", funcion.PeliculaId);
@@ -227,14 +259,7 @@ namespace ReservaCine.Controllers
             ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
-        //private async void mostrarSalas()
-        //{
-        //    var tipoSalas = await _context.TipoSala
-        //                                .Select(t => new SelectListItem(t.Nombre, t.Id.ToString()))
-        //                                .ToListAsync();
-
-        //    ViewBag.TipoSalas = tipoSalas;
-        //}
+       
 
     }
 }

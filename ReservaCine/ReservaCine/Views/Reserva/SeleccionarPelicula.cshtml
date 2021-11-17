@@ -51,7 +51,7 @@
                     <form asp-controller="Reserva" asp-action="SeleccionarFuncion" method="post">
                         <input name="peliculaId" type="hidden" value="@item.Id" />
                         <div class="form-group">
-                            <input name="butacas" class="form-control" />
+                            <input type="number" min="1" value="2" name="butacas"  class="form-control" />
                             <button type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-success">Seleccionar</button>
                         </div>
                         

@@ -117,32 +117,40 @@ namespace ReservaCine.Controllers
             {
                 if (seguridad.ValidarPass(pass))
                 {
-
-                    var nuevoCliente = new Cliente
+                         var existeUser = _context.Cliente
+                           .Any(c => usuario.NombreUsuario == c.NombreUsuario);
+                    if (!existeUser)
                     {
-                        Nombre = usuario.Nombre,
-                        Apellido = usuario.Apellido,
-                        DNI = usuario.DNI,
-                        Domicilio = usuario.Domicilio,
-                        Email = usuario.Email,
-                        FechaAlta = DateTime.Today,
-                        Password = seguridad.EncriptarPass(pass),
-                        Id = Guid.NewGuid(),
-                        NombreUsuario = usuario.NombreUsuario,
-                        Telefono = usuario.Telefono,
+                        var nuevoCliente = new Cliente
+                        {
+                            Nombre = usuario.Nombre,
+                            Apellido = usuario.Apellido,
+                            DNI = usuario.DNI,
+                            Domicilio = usuario.Domicilio,
+                            Email = usuario.Email,
+                            FechaAlta = DateTime.Today,
+                            Password = seguridad.EncriptarPass(pass),
+                            Id = Guid.NewGuid(),
+                            NombreUsuario = usuario.NombreUsuario,
+                            Telefono = usuario.Telefono,
 
 
 
-                    };
+                        };
 
 
-                    _context.Cliente.Add(nuevoCliente);
+                        _context.Cliente.Add(nuevoCliente);
 
 
 
-           
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Ingresar));
+
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Ingresar));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(nameof(Usuario.NombreUsuario), "Ya existe ese nombre usuario.");
+                    }
                 }
                 else
                 {
