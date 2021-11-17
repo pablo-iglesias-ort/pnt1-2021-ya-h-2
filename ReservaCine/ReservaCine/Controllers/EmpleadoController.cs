@@ -98,7 +98,7 @@ namespace ReservaCine.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Legajo,Id,Nombre,Apellido,DNI,Email,Domicilio,Telefono,FechaAlta,NombreUsuario")] Empleado empleado)
+        public async Task<IActionResult> Edit(Guid id,  Empleado empleado)
         {
             if (id != empleado.Id)
             {
@@ -109,7 +109,13 @@ namespace ReservaCine.Controllers
             {
                 try
                 {
-                    _context.Update(empleado);
+                    var EmpleadoOriginal = _context.Empleado.FirstOrDefault(e => e.Id == id);
+                    EmpleadoOriginal.Email = empleado.Email;
+                    EmpleadoOriginal.Domicilio = empleado.Domicilio;
+                    EmpleadoOriginal.Telefono = empleado.Telefono;
+
+
+                    _context.Update(EmpleadoOriginal);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
