@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ using ReservaCine.Data;
 using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
-{
+{   [Authorize]
     public class SalaController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -18,14 +19,14 @@ namespace ReservaCine.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Sala
         public async Task<IActionResult> Index()
         {
             var reservaCineContext = _context.Sala.Include(s => s.TipoSala);
             return View(await reservaCineContext.ToListAsync());
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Sala/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -45,6 +46,7 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Sala/Create
         public IActionResult Create()
         {
@@ -52,6 +54,7 @@ namespace ReservaCine.Controllers
             return View();
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Sala/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -69,7 +72,7 @@ namespace ReservaCine.Controllers
             ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre", sala.TipoSalaId);
             return View(sala);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Sala/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -87,6 +90,7 @@ namespace ReservaCine.Controllers
             return View(sala);
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         private async void mostrarTipoSalas()
         {
             var tipoSalas = await _context.TipoSala
@@ -96,6 +100,7 @@ namespace ReservaCine.Controllers
             ViewBag.TipoSalas = tipoSalas;
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Sala/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -133,7 +138,7 @@ namespace ReservaCine.Controllers
             ViewData["TipoSalaId"] = new SelectList(_context.TipoSala, "Id", "Nombre", sala.TipoSalaId);
             return View(sala);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Sala/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -152,7 +157,7 @@ namespace ReservaCine.Controllers
 
             return View(sala);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Sala/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -164,6 +169,7 @@ namespace ReservaCine.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        
         private bool SalaExists(Guid id)
         {
             return _context.Sala.Any(e => e.Id == id);
