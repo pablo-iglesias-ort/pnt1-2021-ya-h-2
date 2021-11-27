@@ -168,8 +168,8 @@ namespace ReservaCine.Controllers
            
             var reserva = await _context.Reserva
                                                 .Include(r=>r.Funcion)
-                                                .ThenInclude(r => r.Pelicula)
-                                                .FirstOrDefaultAsync(f => f.Id == id);
+                                                .ThenInclude(f => f.Pelicula)
+                                                .FirstOrDefaultAsync(r => r.Id == id);
 
         
             reserva.Funcion.CantButacasDisponibles = reserva.Funcion.CantButacasDisponibles + reserva.CantidadButacas;
@@ -193,7 +193,7 @@ namespace ReservaCine.Controllers
             // peliculas con funciones confirmadas y butacas disponibles
             var peliculasDisponibles = await _context.Funcion
                                                         .Include(f => f.Pelicula)
-                                                         .ThenInclude(f => f.Genero)
+                                                         .ThenInclude(p => p.Genero)
                                                         .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
                                                        .Select(f => f.Pelicula)
                                                       .Distinct()
@@ -204,7 +204,12 @@ namespace ReservaCine.Controllers
         [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> SeleccionarFuncion(Guid peliculaId, int butacas)
         {
-            if(butacas <= 0)
+            var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+            if (ClienteTieneReservaActiva(clienteId, out Guid? reservaId))
+            {
+                return RedirectToAction(nameof(Details), new { id = reservaId });
+            }
+            if (butacas <= 0)
             {
                 
                 return RedirectToAction(nameof(SeleccionarPelicula));
@@ -222,8 +227,7 @@ namespace ReservaCine.Controllers
         [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> ConfirmarReserva(Guid FuncionId, int butacas)
         {
-            //TODO -- COMO MANDAR UN MSJ DE ERROR EN CASO DE QUERER RESERVAR SIN HABER SELECCIONADO LAS BUTACAS
-           
+                      
             var peliculaReservada = await _context.Funcion
                                                         .Include(f => f.Sala)
                                                        .ThenInclude(f => f.TipoSala)

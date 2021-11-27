@@ -24,10 +24,10 @@ namespace ReservaCine.Controllers
         public async Task<IActionResult> Index()
         {
             var reservaCineContext = _context.Funcion
-                                       .Where(f => f.Confirmar)
+                                       .Where(f => f.Confirmar) //donde las funciones estén confirmadas
                                     .Include(f => f.Pelicula)
                                     .Include(f => f.Sala)
-                                    .ThenInclude(f => f.TipoSala);
+                                    .ThenInclude(s => s.TipoSala);
             return View(await reservaCineContext.ToListAsync());
         }
 
@@ -42,7 +42,8 @@ namespace ReservaCine.Controllers
             var funcion = await _context.Funcion
                 .Include(f => f.Pelicula)
                 .Include(f => f.Sala)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(f => f.Id == id);
+
             if (funcion == null)
             {
                 return NotFound();
@@ -77,9 +78,7 @@ namespace ReservaCine.Controllers
 
                 var butacas = await _context.Sala
                                          .Where(s => s.Id == funcion.SalaId)
-                                        //.Select(s => s.CapacidadButacas)
-
-                                        .FirstOrDefaultAsync(s => s.Id == funcion.SalaId);
+                                         .FirstOrDefaultAsync(s => s.Id == funcion.SalaId);
 
                 funcion.CantButacasDisponibles = butacas.CapacidadButacas;
 
@@ -209,7 +208,8 @@ namespace ReservaCine.Controllers
             var funcion = await _context.Funcion
                 .Include(f => f.Pelicula)
                 .Include(f => f.Sala)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(f => f.Id == id);
+
             if (funcion == null)
             {
                 return NotFound();
@@ -232,7 +232,7 @@ namespace ReservaCine.Controllers
 
         private bool FuncionExists(Guid id)
         {
-            return _context.Funcion.Any(e => e.Id == id);
+            return _context.Funcion.Any(f => f.Id == id);
         }
 
         private async void completarPeliculas()

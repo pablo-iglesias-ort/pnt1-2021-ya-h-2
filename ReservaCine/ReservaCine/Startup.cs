@@ -32,7 +32,7 @@ namespace ReservaCine
                     opciones.AccessDeniedPath = "/Usuario/AccesoDenegado";
                     opciones.LogoutPath = "/Usuario/Salir";
                    
-                    //opciones.ReturnUrlParameter = "/Home/Index"; FALTA AGREGAR ENRUTAMIENTO A BOTON SALIR 
+                    
                 }
             );
 

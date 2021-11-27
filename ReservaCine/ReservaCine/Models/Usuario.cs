@@ -36,7 +36,7 @@ namespace ReservaCine.Models
         [Required(ErrorMessage = "Ingrese un número de Teléfono")]
         [Range(000000000, 99999999999, ErrorMessage = "Teléfono incorrecto")]
         [DisplayName("Teléfono")]
-        //[Phone]
+       
         public long Telefono { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

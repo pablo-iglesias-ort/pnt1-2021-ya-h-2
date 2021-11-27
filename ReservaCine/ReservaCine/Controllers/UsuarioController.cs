@@ -30,6 +30,8 @@ namespace ReservaCine.Controllers
         public IActionResult Ingresar(string returnUrl)
         {
             TempData["UrlIngreso"] = returnUrl;
+
+
             return View();
         }
 

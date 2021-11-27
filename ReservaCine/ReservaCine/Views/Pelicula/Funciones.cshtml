@@ -36,6 +36,8 @@
         {
 
         <tr>
+            @if (item.Confirmar && item.CantButacasDisponibles > 0)
+            {
             <td>
                 @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
             </td>
@@ -55,8 +57,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CantButacasDisponibles)
             </td>
-
-
+            }
+           
 
 
         </tr>

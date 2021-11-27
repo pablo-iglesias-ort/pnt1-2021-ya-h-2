@@ -25,6 +25,7 @@ namespace ReservaCine.Controllers
             return View();
         }
 
+        //esta parte no se pide y fue quitado de la vista
         [Authorize(Roles = nameof(Rol.Cliente))]
         public IActionResult Privacy()
         {
