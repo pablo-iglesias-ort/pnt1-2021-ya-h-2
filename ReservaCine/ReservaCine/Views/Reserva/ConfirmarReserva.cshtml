@@ -29,31 +29,32 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Sala)
         </dt>
-        <dd>
+        <dd class="col-sm-10">
             @{
                 var sala = Model.Sala.Numero + " - " + Model.Sala.TipoSala.Nombre;
-            } @sala
-            
+            }
+            @sala
         </dd>
         <dt class="col-sm-2">
-            
-              
-                @Html.DisplayNameFor(model => model.Sala.TipoSala.Precio)
-            
+            Precio Unitario
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Sala.TipoSala.Precio)
-            <br/>
         </dd>
-      
         <dt class="col-sm-2">
-            <br/>
-            Butacas
+            Cantidad Butacas
         </dt>
         <dd class="col-sm-10">
-            <hr />
             @ViewBag.Butacas
         </dd>
+        <dt class="col-sm-2">
+            Precio Total
+        </dt>
+        <dd class="col-sm-10">
+            @{var precioTotal = Model.Sala.TipoSala.Precio * @ViewBag.Butacas;} @*multiplico el precio unitario por la cantidad de butacas seleccionadas para obtener el precio total*@
+            @precioTotal
+        </dd>
+
     </dl>
 </div>
 <div>

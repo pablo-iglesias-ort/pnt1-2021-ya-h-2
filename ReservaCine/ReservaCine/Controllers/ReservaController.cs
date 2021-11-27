@@ -11,6 +11,7 @@ using ReservaCine.Models;
 
 namespace ReservaCine.Controllers
 {
+    [Authorize]
     public class ReservaController : Controller
     {
         private readonly ReservaCineContext _context;
@@ -35,7 +36,8 @@ namespace ReservaCine.Controllers
 
             return View(await _context.Reserva.Where(r => r.ClienteId == IdDeCliente && !r.Activa).OrderByDescending(x => x.FechaAlta).ToListAsync());
         }
-       
+
+        [Authorize(Roles = nameof(Rol.Administrador) + "," + nameof(Rol.Cliente))]
         // GET: Reserva/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -55,14 +57,14 @@ namespace ReservaCine.Controllers
 
             return View(reserva);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // GET: Reserva/Create
         public IActionResult Create()
         {
             completarFuncion();
             return View();
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // POST: Reserva/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -83,6 +85,7 @@ namespace ReservaCine.Controllers
             return View(reserva);
         }
 
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // GET: Reserva/Edit/5
 
         //[Authorize(Roles = nameof(Rol.Administrador) + "," + nameof(Rol.Cliente))]
@@ -100,7 +103,7 @@ namespace ReservaCine.Controllers
             }
             return View(reserva);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // POST: Reserva/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -135,7 +138,7 @@ namespace ReservaCine.Controllers
             }
             return View(reserva);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // GET: Reserva/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -155,7 +158,7 @@ namespace ReservaCine.Controllers
 
             return View(reserva);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         // POST: Reserva/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -165,8 +168,8 @@ namespace ReservaCine.Controllers
            
             var reserva = await _context.Reserva
                                                 .Include(r=>r.Funcion)
-                                                .ThenInclude(r => r.Pelicula)
-                                                .FirstOrDefaultAsync(f => f.Id == id);
+                                                .ThenInclude(f => f.Pelicula)
+                                                .FirstOrDefaultAsync(r => r.Id == id);
 
         
             reserva.Funcion.CantButacasDisponibles = reserva.Funcion.CantButacasDisponibles + reserva.CantidadButacas;
@@ -178,7 +181,7 @@ namespace ReservaCine.Controllers
           
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> SeleccionarPelicula()
         {
             var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
@@ -190,7 +193,7 @@ namespace ReservaCine.Controllers
             // peliculas con funciones confirmadas y butacas disponibles
             var peliculasDisponibles = await _context.Funcion
                                                         .Include(f => f.Pelicula)
-                                                         .ThenInclude(f => f.Genero)
+                                                         .ThenInclude(p => p.Genero)
                                                         .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
                                                        .Select(f => f.Pelicula)
                                                       .Distinct()
@@ -198,10 +201,19 @@ namespace ReservaCine.Controllers
 
             return View(peliculasDisponibles);            
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> SeleccionarFuncion(Guid peliculaId, int butacas)
         {
-            
+            var clienteId = Guid.Parse(User.FindFirst("IdDeUsuario").Value);
+            if (ClienteTieneReservaActiva(clienteId, out Guid? reservaId))
+            {
+                return RedirectToAction(nameof(Details), new { id = reservaId });
+            }
+            if (butacas <= 0)
+            {
+                
+                return RedirectToAction(nameof(SeleccionarPelicula));
+            }
             // peliculas con funciones confirmadas y butacas disponibles
             var funcionesDisponibles = await _context.Funcion
                                                        .Where(f => f.CantButacasDisponibles >= butacas && f.Confirmar && f.PeliculaId == peliculaId)
@@ -212,10 +224,10 @@ namespace ReservaCine.Controllers
             ViewBag.Butacas = butacas;
             return View(funcionesDisponibles);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         public async Task<IActionResult> ConfirmarReserva(Guid FuncionId, int butacas)
         {
-        
+                      
             var peliculaReservada = await _context.Funcion
                                                         .Include(f => f.Sala)
                                                        .ThenInclude(f => f.TipoSala)
@@ -225,7 +237,7 @@ namespace ReservaCine.Controllers
 
             return View(peliculaReservada);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         [HttpPost]
         public async Task<IActionResult> ReservaConfirmada(Guid FuncionId, int butacas)
         {
@@ -248,20 +260,20 @@ namespace ReservaCine.Controllers
             await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = reserva.Id });
             }
-           
-        
+
+        [Authorize(Roles = nameof(Rol.Cliente))]
         private bool ClienteTieneReservaActiva(Guid clienteId, out Guid? reservaId)
         {
             var reserva = _context.Reserva.FirstOrDefault(r => r.Activa && r.ClienteId == clienteId);
             reservaId = reserva?.Id;
             return reserva != null;
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         private bool ReservaExists(Guid id)
         {
             return _context.Reserva.Any(e => e.Id == id);
         }
-
+        [Authorize(Roles = nameof(Rol.Cliente))]
         private async void completarFuncion()
         {
             ViewBag.FuncionId = await _context.Funcion.ToListAsync();

@@ -6,11 +6,11 @@
 
 <h1>Eliminar</h1>
 
-<h3>¿Estás seguro de querer eliminar este tipo de sala?</h3>
+<h3>¿Estás seguro de querer eliminar este Tipo de Sala?</h3>
 <div>
-    <h4>TipoSala</h4>
+    <h4>Tipo de Sala</h4>
     <hr />
-    <dl class="row">
+    <dl class="row text-light">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
@@ -28,6 +28,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Lista de Tipo de Salas</a>
+        <a asp-action="Index">Volver a Lista de Tipos de Sala</a>
     </form>
 </div>

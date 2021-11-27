@@ -20,12 +20,14 @@ namespace ReservaCine.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Genero
         public async Task<IActionResult> Index()
         {
             return View(await _context.Genero.ToListAsync());
         }
 
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Genero/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -35,7 +37,8 @@ namespace ReservaCine.Controllers
             }
 
             var genero = await _context.Genero
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(g => g.Id == id);
+
             if (genero == null)
             {
                 return NotFound();
@@ -67,7 +70,7 @@ namespace ReservaCine.Controllers
             }
             return View(genero);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Genero/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -83,7 +86,7 @@ namespace ReservaCine.Controllers
             }
             return View(genero);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Genero/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -118,7 +121,7 @@ namespace ReservaCine.Controllers
             }
             return View(genero);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // GET: Genero/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -128,7 +131,7 @@ namespace ReservaCine.Controllers
             }
 
             var genero = await _context.Genero
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(g => g.Id == id);
             if (genero == null)
             {
                 return NotFound();
@@ -136,7 +139,7 @@ namespace ReservaCine.Controllers
 
             return View(genero);
         }
-
+        [Authorize(Roles = nameof(Rol.Administrador))]
         // POST: Genero/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

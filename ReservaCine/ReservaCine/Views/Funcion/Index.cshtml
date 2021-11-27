@@ -69,8 +69,7 @@
                 @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
-                    <label>|</label>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Elimnar</a>
+                    
 
                 }
 
