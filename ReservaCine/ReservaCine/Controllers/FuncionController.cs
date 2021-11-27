@@ -123,6 +123,7 @@ namespace ReservaCine.Controllers
                                         .ToListAsync();
 
             ViewBag.Salas = salas;
+            
 
             return View(funcion);
         }
@@ -237,4 +238,6 @@ namespace ReservaCine.Controllers
         //}
 
     }
+
+    
 }
