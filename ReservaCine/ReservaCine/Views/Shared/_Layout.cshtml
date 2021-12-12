@@ -29,7 +29,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Pelicula" asp-action="Index">Películas</a>
                     </li>
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Reserva" asp-action="Index">Mis Reservas</a>

@@ -259,7 +259,25 @@ namespace ReservaCine.Controllers
             ViewBag.SalaNumero = await _context.Sala
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
-       
+
+        public IActionResult Reservas(Guid id)
+        {
+            if (!FuncionExists(id))
+            {
+                return NotFound();
+            }
+
+            var reservaFuncion = _context.Funcion
+                                            .Include(funcion => funcion.Reservas)
+                                                .ThenInclude(reserva => reserva.Funcion)
+                                                .ThenInclude(funcion => funcion.Pelicula)
+                                            .Include(funcion => funcion.Reservas)
+                                                .ThenInclude(reserva => reserva.Cliente)
+                                            .FirstOrDefault(f => f.Id == id);
+
+
+            return View(reservaFuncion);
+        }
 
     }
 }

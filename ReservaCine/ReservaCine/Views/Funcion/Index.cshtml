@@ -69,11 +69,15 @@
                 @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
-                    
+                    <form asp-controller="Funcion" asp-action="Reservas" method="get">
+                        <div class="form-group">
+                            <button asp-controller="Funcion" asp-action="Reservas" asp-route-id="@item.Id" type="submit" class="nav-link font-weight-bold text-light border border-dark btn btn-success"> Ver Reservas</button>
+                        </div>
+                     </form>
 
-                }
+                  }
 
-            </td>
+                </td>
         </tr>
 }
     </tbody>
