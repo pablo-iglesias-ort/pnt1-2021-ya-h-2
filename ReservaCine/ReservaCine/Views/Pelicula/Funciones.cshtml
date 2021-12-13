@@ -65,3 +65,13 @@
                 }
         </tbody>
 </table>
+<div>
+    @if (User.IsInRole(nameof(Rol.Cliente)))
+    {
+
+
+        <a asp-action="Index"> Volver a la lista </a>
+
+    }
+
+</div>

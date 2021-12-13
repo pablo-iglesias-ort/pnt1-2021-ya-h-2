@@ -174,16 +174,7 @@ namespace ReservaCine.Controllers
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public  IActionResult MostrarFunciones()
-        {
-            var funciones =  _context.Funcion
-                                        .Include(f => f.Reservas)
-                                        .Select(f => new SelectListItem(string.Concat(f.Fecha, " - ", f.Hora, " - ", f.Pelicula.Titulo), f.Id.ToString()))
-                                        .ToListAsync();
-
-            ViewBag.Funcion = funciones;
-            return View(funciones);
-        }
+     
 
     }
 }

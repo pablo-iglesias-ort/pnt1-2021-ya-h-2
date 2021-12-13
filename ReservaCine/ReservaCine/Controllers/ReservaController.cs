@@ -196,7 +196,7 @@ namespace ReservaCine.Controllers
                                                          .ThenInclude(p => p.Genero)
                                                         .Where(f => f.CantButacasDisponibles > 0 && f.Confirmar)
                                                        .Select(f => f.Pelicula)
-                                                      .Distinct()
+                                                      .Distinct()   //para que no se repita 2 veces el mismo nombre
                                                        .ToListAsync();
 
             return View(peliculasDisponibles);            

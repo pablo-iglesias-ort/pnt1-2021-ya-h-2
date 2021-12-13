@@ -30,25 +30,28 @@
             <th>
                 @Html.DisplayNameFor(model => model.Duracion)
             </th>
-            
-
-            @if (!User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Administrador)))
             {
-                <th>
-
-                    Seleccionar Cantidad de Butacas
-                    <br />
-                </th>
+                <th></th>
             }
-            @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
-            {
-                <th>
 
-                    Funciones
-                    <br />
-                </th>
-            }
-        </tr>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <th>
+
+                        Seleccionar Cantidad de Butacas
+                        <br />
+                    </th>
+                }
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Rol.Cliente)))
+                {
+                    <th>
+
+                        Funciones
+                        <br />
+                    </th>
+                }
+            </tr>
     </thead>
 
     <tbody>

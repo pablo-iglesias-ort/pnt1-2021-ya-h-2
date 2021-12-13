@@ -157,6 +157,7 @@ namespace ReservaCine.Controllers
             }
 
             buscarGenero(pelicula.GeneroId);
+            
 
             return View(pelicula);
         }
